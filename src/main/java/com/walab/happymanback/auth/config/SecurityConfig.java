@@ -47,7 +47,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             request ->
                 request
-                    .requestMatchers("/api/happyman/auth/**", "/swagger-ui/**", "/error", "/v3/api-docs/**")
+                    .requestMatchers(
+                        "/api/happyman/auth/**", "/swagger-ui/**", "/error", "/v3/api-docs/**")
                     .permitAll())
         .authorizeHttpRequests(
             request ->
