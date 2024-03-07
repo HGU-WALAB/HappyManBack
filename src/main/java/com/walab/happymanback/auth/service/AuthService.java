@@ -30,11 +30,12 @@ public class AuthService {
   public AuthDto login(AuthDto dto) {
     Optional<User> user = userRepository.findById(dto.getUniqueId());
     if (user.isEmpty()) {
-      User newUser = userRepository.save(User.from(dto.getUniqueId()));
-      userRepository.save(newUser);
-      return AuthDto.builder()
-          .token(JwtUtil.createToken(newUser.getUniqueId(), newUser.getStatus().name(), SECRET_KEY))
-          .build();
+      throw new IllegalArgumentException("해당 유저가 없습니다.");
+//      User newUser = userRepository.save(User.from(dto.getUniqueId()));
+//      userRepository.save(newUser);
+//      return AuthDto.builder()
+//          .token(JwtUtil.createToken(newUser.getUniqueId(), newUser.getStatus().name(), SECRET_KEY))
+//          .build();
     }
     return AuthDto.builder()
         .token(
