@@ -5,12 +5,14 @@ import com.walab.happymanback.auth.service.AuthService;
 import com.walab.happymanback.auth.util.JwtUtil;
 import com.walab.happymanback.user.domain.User;
 import com.walab.happymanback.auth.exception.DoNotLoginException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -33,10 +35,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
-    if (request.getRequestURI().startsWith("/error")
-        || request.getRequestURI().startsWith("/api/happyman/auth/")
-        || request.getRequestURI().startsWith("/swagger-ui/")
-        || request.getRequestURI().startsWith("/v3/api-docs")) {
+    String pattern1 = ".*/error.*";
+    String pattern2 = ".*/api/happyman/auth/.*";
+
+    // 정규 표현식 패턴을 컴파일하여 패턴 객체 생성
+    Pattern regex1 = Pattern.compile(pattern1);
+    Pattern regex2 = Pattern.compile(pattern2);
+    if (regex1.matcher(request.getRequestURI()).matches()
+        || regex2.matcher(request.getRequestURI()).matches()
+    ) {
       filterChain.doFilter(request, response);
       return;
     }

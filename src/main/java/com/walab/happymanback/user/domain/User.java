@@ -1,8 +1,9 @@
 package com.walab.happymanback.user.domain;
 
+import com.walab.happymanback.auth.dto.AuthDto;
 import com.walab.happymanback.base.domain.BaseTime;
 import com.walab.happymanback.user.domain.enums.UserStatus;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,18 +37,27 @@ public class User extends BaseTime {
   private String major1;
 
   private String major2;
+  public void update(AuthDto dto) {
+    this.name = dto.getName();
+    this.email = dto.getEmail();
+    this.grade = dto.getGrade();
+    this.semester = dto.getSemester();
+    this.department = dto.getDepartment();
+    this.major1 = dto.getMajor1();
+    this.major2 = dto.getMajor2();
+  }
 
-  public static User from(String uniqueId) {
+  public static User from(AuthDto dto) {
     return User.builder()
-        .uniqueId(uniqueId)
-        .name("홍길동")
-        .email(uniqueId + "@handong.ac.kr")
+        .uniqueId(dto.getUniqueId())
+        .name(dto.getName())
+        .email(dto.getEmail())
         .status(UserStatus.USER)
-        .grade(3)
-        .semester(1)
-        .department("전산전자공학부")
-        .major1("컴퓨터공학 심화")
-        .major2("컴퓨터공학 심화")
+        .grade(dto.getGrade())
+        .semester(dto.getSemester())
+        .department(dto.getDepartment())
+        .major1(dto.getMajor1())
+        .major2(dto.getMajor2())
         .build();
   }
 }
