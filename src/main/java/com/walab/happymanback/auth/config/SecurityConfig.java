@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -37,26 +36,19 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.cors(Customizer.withDefaults())
-        .csrf(AbstractHttpConfigurer::disable)
-        .addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(
-            new JwtTokenFilter(authService, SECRET_KEY), UsernamePasswordAuthenticationFilter.class)
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(
-            request ->
-                request
-                    .requestMatchers(
-                        "/api/happyman/auth/**", "/swagger-ui/**", "/error", "/v3/api-docs/**")
-                    .permitAll())
-        .authorizeHttpRequests(
-            request ->
-                request
-                    .requestMatchers("/api/happyman/admin/**")
-                    .hasAuthority(UserStatus.ADMIN.name()))
-        .authorizeHttpRequests(
-            request -> request.requestMatchers("/api/happyman/**").authenticated());
+    http.cors()
+            .and()
+            .csrf(AbstractHttpConfigurer::disable)
+            .addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(
+                    new JwtTokenFilter(authService, SECRET_KEY), UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/api/happyman/auth/**", "/error").permitAll()
+            .antMatchers("/api/happyman/admin/**").hasAuthority(UserStatus.ADMIN.name())
+            .antMatchers("/api/happyman/**").authenticated();
     return http.build();
   }
 
