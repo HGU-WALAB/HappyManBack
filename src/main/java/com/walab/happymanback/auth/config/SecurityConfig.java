@@ -46,7 +46,7 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/happyman/auth/**", "/error").permitAll()
+            .antMatchers("/api/happyman/auth/**", "/error","/api/happyman/all/**").permitAll()
             .antMatchers("/api/happyman/admin/**").hasAuthority(UserStatus.ADMIN.name())
             .antMatchers("/api/happyman/**").authenticated();
     return http.build();
