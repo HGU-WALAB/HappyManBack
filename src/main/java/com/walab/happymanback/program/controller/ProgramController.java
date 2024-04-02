@@ -2,6 +2,7 @@ package com.walab.happymanback.program.controller;
 
 import com.walab.happymanback.file.service.FileService;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.controller.response.ProgramListResponse;
 import com.walab.happymanback.program.dto.ProgramDto;
 import com.walab.happymanback.program.service.ProgramService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ProgramController {
 
   private static final String PROGRAM_FILE_DIR = "program/file";
 
-  @PostMapping("/api/happyman/admin/program")
+  @PostMapping("/api/happyman/admin/programs")
   public ResponseEntity<Void> createProgram(
       @ModelAttribute AddProgramRequest request,
       @RequestParam(value = "image", required = false) MultipartFile image,
@@ -33,5 +34,10 @@ public class ProgramController {
             fileService.uploadFile(image, PROGRAM_IMAGE_DIR),
             fileService.uploadFiles(file, PROGRAM_FILE_DIR)));
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/api/happyman/all/programs")
+  public ResponseEntity<ProgramListResponse> getPrograms() {
+    return ResponseEntity.ok(ProgramListResponse.from(programService.getPrograms()));
   }
 }

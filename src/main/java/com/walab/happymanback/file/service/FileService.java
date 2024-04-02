@@ -2,6 +2,7 @@ package com.walab.happymanback.file.service;
 
 import com.walab.happymanback.file.dto.FileDto;
 import com.walab.happymanback.file.exception.FileUploadFailException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class FileService {
-  private final String FILE_PATH = "/home/happyman/files/";
+  @Value("${custom.file.path}")
+  private String FILE_PATH;
 
   public FileDto uploadFile(MultipartFile file, String dir) {
     String originFileName = file.getOriginalFilename();
@@ -34,8 +36,6 @@ public class FileService {
     try {
       File storedFile = new File(filePath + storedFileName);
       file.transferTo(storedFile);
-
-      storedFile.setReadable(true, false);
     } catch (IOException e) {
       throw new FileUploadFailException(e.getMessage());
     }
