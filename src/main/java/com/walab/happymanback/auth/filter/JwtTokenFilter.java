@@ -3,7 +3,7 @@ package com.walab.happymanback.auth.filter;
 import com.walab.happymanback.auth.exception.WrongTokenException;
 import com.walab.happymanback.auth.service.AuthService;
 import com.walab.happymanback.auth.util.JwtUtil;
-import com.walab.happymanback.user.domain.User;
+import com.walab.happymanback.user.entity.User;
 import com.walab.happymanback.auth.exception.DoNotLoginException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -37,13 +37,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     String pattern1 = ".*/error.*";
     String pattern2 = ".*/api/happyman/auth/.*";
+    String pattern3 = ".*/api/happyman/all/.*";
 
     // 정규 표현식 패턴을 컴파일하여 패턴 객체 생성
     Pattern regex1 = Pattern.compile(pattern1);
     Pattern regex2 = Pattern.compile(pattern2);
     if (regex1.matcher(request.getRequestURI()).matches()
         || regex2.matcher(request.getRequestURI()).matches()
-    ) {
+        || request.getRequestURI().matches(pattern3)) {
       filterChain.doFilter(request, response);
       return;
     }

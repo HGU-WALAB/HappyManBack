@@ -1,4 +1,4 @@
-package com.walab.happymanback.user.domain.enums;
+package com.walab.happymanback.user.entity.enums;
 
 import lombok.Getter;
 

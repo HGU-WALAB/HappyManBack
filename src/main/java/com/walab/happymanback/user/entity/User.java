@@ -1,8 +1,8 @@
-package com.walab.happymanback.user.domain;
+package com.walab.happymanback.user.entity;
 
 import com.walab.happymanback.auth.dto.AuthDto;
-import com.walab.happymanback.base.domain.BaseTime;
-import com.walab.happymanback.user.domain.enums.UserStatus;
+import com.walab.happymanback.base.entity.BaseTime;
+import com.walab.happymanback.user.entity.enums.UserStatus;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,27 +16,34 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User extends BaseTime {
   @Id
-  @Column(nullable = false, length = 50)
+  @Column(name = "unique_id", nullable = false, length = 50)
   private String uniqueId;
 
-  @Column(nullable = false, length = 50)
+  @Column(name = "name", nullable = false, length = 50)
   private String name;
 
   @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false)
   private UserStatus status;
 
-  @Column(length = 320)
+  @Column(name = "email", length = 320)
   private String email;
 
+  @Column(name = "grade")
   private Integer grade;
 
+  @Column(name = "semester")
   private Integer semester;
 
+  @Column(name = "department", length = 50)
   private String department;
 
+  @Column(name = "major1", length = 50)
   private String major1;
 
+  @Column(name = "major2", length = 50)
   private String major2;
+
   public void update(AuthDto dto) {
     this.name = dto.getName();
     this.email = dto.getEmail();

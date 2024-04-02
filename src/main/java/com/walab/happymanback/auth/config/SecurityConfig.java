@@ -3,7 +3,7 @@ package com.walab.happymanback.auth.config;
 import com.walab.happymanback.auth.filter.ExceptionHandlerFilter;
 import com.walab.happymanback.auth.filter.JwtTokenFilter;
 import com.walab.happymanback.auth.service.AuthService;
-import com.walab.happymanback.user.domain.enums.UserStatus;
+import com.walab.happymanback.user.entity.enums.UserStatus;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/happyman/auth/**", "/error").permitAll()
+            .antMatchers("/api/happyman/auth/**", "/error","/api/happyman/all/**").permitAll()
             .antMatchers("/api/happyman/admin/**").hasAuthority(UserStatus.ADMIN.name())
             .antMatchers("/api/happyman/**").authenticated();
     return http.build();
