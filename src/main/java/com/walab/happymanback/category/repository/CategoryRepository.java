@@ -1,6 +1,6 @@
 package com.walab.happymanback.category.repository;
 
-import com.walab.happymanback.category.domain.Category;
+import com.walab.happymanback.category.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

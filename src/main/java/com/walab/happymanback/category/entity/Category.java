@@ -1,4 +1,4 @@
-package com.walab.happymanback.category.domain;
+package com.walab.happymanback.category.entity;
 
 import com.walab.happymanback.base.entity.BaseTime;
 import lombok.Getter;

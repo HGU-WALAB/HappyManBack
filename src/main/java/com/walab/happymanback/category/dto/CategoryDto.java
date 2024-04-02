@@ -1,6 +1,6 @@
 package com.walab.happymanback.category.dto;
 
-import com.walab.happymanback.category.domain.Category;
+import com.walab.happymanback.category.entity.Category;
 import lombok.Builder;
 import lombok.Getter;
 

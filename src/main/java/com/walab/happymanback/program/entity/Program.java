@@ -1,13 +1,21 @@
 package com.walab.happymanback.program.entity;
 
 import com.walab.happymanback.base.entity.BaseTime;
-import com.walab.happymanback.category.domain.Category;
+import com.walab.happymanback.category.entity.Category;
+import com.walab.happymanback.program.dto.ProgramDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 public class Program extends BaseTime {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,4 +70,29 @@ public class Program extends BaseTime {
       cascade = CascadeType.ALL,
       orphanRemoval = true)
   private List<ProgramFile> files;
+
+  public static Program from(ProgramDto dto, Category category) {
+    Program newProgram =
+        Program.builder()
+            .name(dto.getName())
+            .quota(dto.getQuota())
+            .currentQuota(dto.getCurrentQuota())
+            .information(dto.getInformation())
+            .applyStartDate(dto.getApplyStartDate())
+            .applyEndDate(dto.getApplyEndDate())
+            .startDate(dto.getStartDate())
+            .endDate(dto.getEndDate())
+            .applicationForm(dto.getApplicationForm())
+            .surveyForm(dto.getSurveyForm())
+            .managerName(dto.getManagerName())
+            .managerContact(dto.getManagerContact())
+            .image(dto.getImage())
+            .category(category)
+            .build();
+    newProgram.setFiles(
+        dto.getProgramFileDtos().stream()
+            .map(programFileDto -> ProgramFile.from(newProgram, programFileDto))
+            .collect(Collectors.toList()));
+    return newProgram;
+  }
 }
