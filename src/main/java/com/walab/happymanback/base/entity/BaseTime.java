@@ -1,4 +1,4 @@
-package com.walab.happymanback.base.domain;
+package com.walab.happymanback.base.entity;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;

@@ -1,8 +1,8 @@
-package com.walab.happymanback.user.domain;
+package com.walab.happymanback.user.entity;
 
 import com.walab.happymanback.auth.dto.AuthDto;
-import com.walab.happymanback.base.domain.BaseTime;
-import com.walab.happymanback.user.domain.enums.UserStatus;
+import com.walab.happymanback.base.entity.BaseTime;
+import com.walab.happymanback.user.entity.enums.UserStatus;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

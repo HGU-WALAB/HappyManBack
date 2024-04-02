@@ -3,7 +3,7 @@ package com.walab.happymanback.auth.filter;
 import com.walab.happymanback.auth.exception.WrongTokenException;
 import com.walab.happymanback.auth.service.AuthService;
 import com.walab.happymanback.auth.util.JwtUtil;
-import com.walab.happymanback.user.domain.User;
+import com.walab.happymanback.user.entity.User;
 import com.walab.happymanback.auth.exception.DoNotLoginException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

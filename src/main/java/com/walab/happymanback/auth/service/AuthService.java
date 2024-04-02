@@ -2,7 +2,7 @@ package com.walab.happymanback.auth.service;
 
 import com.walab.happymanback.auth.dto.AuthDto;
 import com.walab.happymanback.auth.util.JwtUtil;
-import com.walab.happymanback.user.domain.User;
+import com.walab.happymanback.user.entity.User;
 import com.walab.happymanback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
