@@ -1,7 +1,9 @@
 package com.walab.happymanback.program.controller.response;
 
+import com.walab.happymanback.bookmark.dto.BookmarkDto;
 import com.walab.happymanback.program.controller.response.enums.ProgramStatus;
 import com.walab.happymanback.program.dto.ProgramDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,15 +13,24 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
+@Builder
 @Getter
 public class ProgramListResponse {
   private List<Program> programs;
 
-  public static ProgramListResponse from(List<ProgramDto> dtos) {
-    ProgramListResponse response = new ProgramListResponse();
-    response.programs = dtos.stream().map(Program::from).collect(Collectors.toList());
-    return response;
+  public static ProgramListResponse from(List<ProgramDto> programDtos, List<BookmarkDto> bookmarkDtos) {
+    return ProgramListResponse.builder()
+        .programs(
+            programDtos.stream()
+                .map(
+                    programDto -> {
+                      Program program = Program.from(programDto);
+                      program.setIsBookmarked(bookmarkDtos.stream()
+                              .anyMatch(bookmarkDto -> bookmarkDto.getProgramId().equals(program.getId())));
+                      return program;
+                    })
+                .collect(Collectors.toList()))
+        .build();
   }
 
   @NoArgsConstructor
@@ -35,14 +46,16 @@ public class ProgramListResponse {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime applyEndDate;
 
-    private static Program from(ProgramDto dto) {
+    private Boolean isBookmarked;
+
+    private static Program from(ProgramDto programDto) {
       Program program = new Program();
-      program.id = dto.getId();
-      program.categoryId = dto.getCategoryDto().getId();
-      program.name = dto.getName();
-      program.image = dto.getImage();
-      program.applyEndDate = dto.getApplyEndDate();
-      program.status = evaluateStatus(dto.getApplyStartDate(), dto.getApplyEndDate()).getKorean();
+      program.id = programDto.getId();
+      program.categoryId = programDto.getCategoryDto().getId();
+      program.name = programDto.getName();
+      program.image = programDto.getImage();
+      program.applyEndDate = programDto.getApplyEndDate();
+      program.status = evaluateStatus(programDto.getApplyStartDate(), programDto.getApplyEndDate()).getKorean();
       return program;
     }
 

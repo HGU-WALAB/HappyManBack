@@ -1,6 +1,7 @@
 package com.walab.happymanback.bookmark.service;
 
 import com.walab.happymanback.base.exception.DoNotExistException;
+import com.walab.happymanback.bookmark.dto.BookmarkDto;
 import com.walab.happymanback.bookmark.repository.BookmarkRepository;
 import com.walab.happymanback.program.entity.Program;
 import com.walab.happymanback.program.repository.ProgramRepository;
@@ -10,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.walab.happymanback.bookmark.entity.Bookmark;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -45,5 +50,15 @@ public class BookmarkService {
             .findById(programId)
             .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
     bookmarkRepository.deleteByUserAndProgram(user, program);
+  }
+
+  public List<BookmarkDto> getBookmarks(String uniqueId) {
+    User user =
+        userRepository
+            .findById(uniqueId)
+            .orElseThrow(() -> new DoNotExistException("해당 유저가 없습니다."));
+    return bookmarkRepository.findAllByUser(user).stream()
+        .map(BookmarkDto::from)
+        .collect(Collectors.toList());
   }
 }
