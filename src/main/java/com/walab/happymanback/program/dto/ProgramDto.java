@@ -61,7 +61,7 @@ public class ProgramDto {
                 .surveyForm(request.getSurveyForm())
                 .managerName(request.getManagerName())
                 .managerContact(request.getManagerContact())
-                .image(imageDto.getStoredFileName())
+                .image(imageDto.getStoredFilePath())
                 .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
                 .programFileDtos(fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
                 .build();

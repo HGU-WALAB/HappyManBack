@@ -33,6 +33,8 @@ public class JwtUtil {
       return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {
       throw new WrongTokenException("만료된 토큰입니다.");
+    } catch (Exception e) {
+      throw new WrongTokenException("유효하지 않은 토큰입니다.");
     }
   }
 }

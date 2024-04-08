@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @RestController
@@ -24,9 +23,9 @@ public class ProgramController {
 
   private final BookmarkService bookmarkService;
 
-  private static final String PROGRAM_IMAGE_DIR = "program/image";
+  private static final String PROGRAM_IMAGE_DIR = "program/image/";
 
-  private static final String PROGRAM_FILE_DIR = "program/file";
+  private static final String PROGRAM_FILE_DIR = "program/file/";
 
   @PostMapping("/api/happyman/admin/programs")
   public ResponseEntity<Void> createProgram(
@@ -34,10 +33,10 @@ public class ProgramController {
           @RequestParam(value = "image", required = false) MultipartFile image,
           @RequestParam(value = "file", required = false) List<MultipartFile> file) {
     programService.createProgram(
-            ProgramDto.from(
-                    request,
-                    fileService.uploadFile(image, PROGRAM_IMAGE_DIR),
-                    fileService.uploadFiles(file, PROGRAM_FILE_DIR)));
+        ProgramDto.from(
+            request,
+            fileService.uploadOneFile(image, PROGRAM_IMAGE_DIR),
+            fileService.uploadFiles(file, PROGRAM_FILE_DIR)));
     return ResponseEntity.ok().build();
   }
 

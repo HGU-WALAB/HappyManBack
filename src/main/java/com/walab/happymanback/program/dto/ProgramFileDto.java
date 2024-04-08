@@ -8,12 +8,12 @@ import lombok.Getter;
 @Builder
 public class ProgramFileDto {
     private String originFileName;
-    private String storedFileName;
+    private String storedFilePath;
 
     public static ProgramFileDto from(FileDto dto) {
         return ProgramFileDto.builder()
                 .originFileName(dto.getOriginFileName())
-                .storedFileName(dto.getStoredFileName())
+                .storedFilePath(dto.getStoredFilePath())
                 .build();
     }
 }

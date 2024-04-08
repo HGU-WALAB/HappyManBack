@@ -10,7 +10,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,37 +23,68 @@ public class FileService {
   @Value("${custom.file.path}")
   private String FILE_PATH;
 
-  public FileDto uploadFile(MultipartFile file, String dir) {
+  public FileDto uploadOneFile(MultipartFile file, String directory){
+    return uploadFile(file, makeDirectory(directory));
+  }
+
+  public FileDto uploadFile(MultipartFile file, String filePath) {
     String originFileName = file.getOriginalFilename();
     String storedFileName = getUniqueFileName(originFileName);
-    String filePath = FILE_PATH + dir + "/";
-    File directory = new File(filePath);
-
-    if (!directory.exists()) {
-      try {
-        Files.createDirectories(Paths.get(filePath));
-      } catch (IOException e) {
-        throw new FileUploadFailException("Failed to create directory: " + e.getMessage());
-      }
-    }
-
+    String absolutePath = FILE_PATH + filePath;
     try {
-      File storedFile = new File(filePath + storedFileName);
+      File storedFile = new File(absolutePath + storedFileName);
       file.transferTo(storedFile);
+      storedFile.setReadable(true, false);
     } catch (IOException e) {
       throw new FileUploadFailException(e.getMessage());
     }
 
     return FileDto.builder()
             .originFileName(originFileName)
-            .storedFileName(storedFileName)
+            .storedFilePath(filePath + storedFileName)
             .build();
+  }
+
+  // 디렉토리 권한을 775로 설정
+  private void setDirectoryPermissions(String directoryPath) throws IOException {
+    Set<PosixFilePermission> perms = new HashSet<>();
+    perms.add(PosixFilePermission.OWNER_READ);
+    perms.add(PosixFilePermission.OWNER_WRITE);
+    perms.add(PosixFilePermission.OWNER_EXECUTE);
+    perms.add(PosixFilePermission.GROUP_READ);
+    perms.add(PosixFilePermission.GROUP_WRITE);
+    perms.add(PosixFilePermission.GROUP_EXECUTE);
+    perms.add(PosixFilePermission.OTHERS_READ);
+    Files.setPosixFilePermissions(Paths.get(directoryPath), perms);
   }
 
   public List<FileDto> uploadFiles(List<MultipartFile> files, String dir) {
     return files.stream()
-            .map(f -> uploadFile(f, dir))
+            .map(f -> uploadFile(f, makeDirectory(dir)))
             .collect(Collectors.toList());
+  }
+
+  private synchronized String makeDirectory(String filePath) {
+    filePath = filePath + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/";
+    String absolutePath = FILE_PATH + filePath;
+    File directory = new File(absolutePath);
+    if (!directory.exists()) {
+      try {
+        Files.createDirectories(Paths.get(absolutePath));
+        while (!(directory.getAbsolutePath()+"/").equals(FILE_PATH)) {
+          setDirectoryPermissions(directory.getAbsolutePath());
+          if (directory.getParentFile() != null) {
+            directory = directory.getParentFile();
+          } else {
+            break;
+          }
+        }
+        return filePath;
+      } catch (IOException e) {
+        throw new FileUploadFailException("Failed to create directory: " + e.getMessage());
+      }
+    }
+    return filePath;
   }
 
   private static String getUniqueFileName(String fileName) {
