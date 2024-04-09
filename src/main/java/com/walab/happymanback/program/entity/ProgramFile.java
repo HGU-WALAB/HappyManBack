@@ -26,14 +26,14 @@ public class ProgramFile extends BaseTime {
   @Column(name = "origin_file_name", nullable = false, length = 260)
   private String originFileName;
 
-  @Column(name = "stored_file_name", nullable = false, length = 500)
-  private String storedFileName;
+  @Column(name = "stored_file_path", nullable = false, length = 500)
+  private String storedFilePath;
 
   public static ProgramFile from(Program program, ProgramFileDto dto) {
     return ProgramFile.builder()
         .program(program)
         .originFileName(dto.getOriginFileName())
-        .storedFileName(dto.getStoredFileName())
+        .storedFilePath(dto.getStoredFilePath())
         .build();
   }
 }

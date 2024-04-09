@@ -38,13 +38,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     String pattern1 = ".*/error.*";
     String pattern2 = ".*/api/happyman/auth/.*";
     String pattern3 = ".*/api/happyman/all/.*";
+    String pattern4 = ".*/file/.*";
 
     // 정규 표현식 패턴을 컴파일하여 패턴 객체 생성
     Pattern regex1 = Pattern.compile(pattern1);
     Pattern regex2 = Pattern.compile(pattern2);
     if (regex1.matcher(request.getRequestURI()).matches()
         || regex2.matcher(request.getRequestURI()).matches()
-        || request.getRequestURI().matches(pattern3)) {
+        || request.getRequestURI().matches(pattern3)
+        || request.getRequestURI().matches(pattern4)) {
       filterChain.doFilter(request, response);
       return;
     }

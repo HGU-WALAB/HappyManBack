@@ -7,5 +7,5 @@ import lombok.Getter;
 @Builder
 public class FileDto {
     private String originFileName;
-    private String storedFileName;
+    private String storedFilePath;
 }

@@ -14,7 +14,7 @@ public class BaseExceptionController {
   public ResponseEntity<ExceptionResponse> handleDoNotExistException(DoNotExistException e) {
     ExceptionResponse response =
         ExceptionResponse.builder()
-            .error(HttpStatus.BAD_REQUEST.toString())
+            .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
             .message(e.getMessage())
             .build();
     return ResponseEntity.badRequest().body(response);

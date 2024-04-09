@@ -3,6 +3,7 @@ package com.walab.happymanback.program.dto;
 import com.walab.happymanback.category.dto.CategoryDto;
 import com.walab.happymanback.file.dto.FileDto;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.entity.Program;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +49,7 @@ public class ProgramDto {
     private List<ProgramFileDto> programFileDtos;
 
     public static ProgramDto from(AddProgramRequest request, FileDto imageDto, List<FileDto> fileDtos) {
-        return ProgramDto.builder()
+        ProgramDto dto=ProgramDto.builder()
                 .name(request.getName())
                 .quota(request.getQuota())
                 .currentQuota(request.getCurrentQuota())
@@ -58,12 +59,34 @@ public class ProgramDto {
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .applicationForm(request.getApplicationForm())
-                .surveyForm(request.getSurveyForm())
                 .managerName(request.getManagerName())
                 .managerContact(request.getManagerContact())
-                .image(imageDto.getStoredFileName())
                 .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
                 .programFileDtos(fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
+                .build();
+        if(imageDto!=null){
+            dto.setImage(imageDto.getStoredFilePath());
+        }
+        return dto;
+    }
+
+    public static ProgramDto from(Program program) {
+        return ProgramDto.builder()
+                .id(program.getId())
+                .name(program.getName())
+                .quota(program.getQuota())
+                .currentQuota(program.getCurrentQuota())
+                .information(program.getInformation())
+                .applyStartDate(program.getApplyStartDate())
+                .applyEndDate(program.getApplyEndDate())
+                .startDate(program.getStartDate())
+                .endDate(program.getEndDate())
+                .applicationForm(program.getApplicationForm())
+                .managerName(program.getManagerName())
+                .managerContact(program.getManagerContact())
+                .image(program.getImage())
+                .categoryDto(CategoryDto.from(program.getCategory()))
+                .programFileDtos(program.getFiles().stream().map(ProgramFileDto::from).collect(Collectors.toList()))
                 .build();
     }
 }
