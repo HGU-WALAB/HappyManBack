@@ -24,7 +24,7 @@ public class FileService {
   private String FILE_PATTERN;
 
   public FileDto uploadOneFile(MultipartFile file, String filePath){
-    if (file.isEmpty()) {
+    if (file==null || file.isEmpty()) {
       return null;
     }
     return uploadFile(file, makeDirectory(filePath));
@@ -62,6 +62,9 @@ public class FileService {
   }
 
   public List<FileDto> uploadFiles(List<MultipartFile> files, String filePath) {
+    if (files == null || files.isEmpty()) {
+      return new ArrayList<>();
+    }
     return files.stream()
             .map(f -> uploadOneFile(f, filePath))
             .filter(Objects::nonNull)
