@@ -42,4 +42,8 @@ public class ProgramService {
                         .build()
         ).collect(Collectors.toList());
     }
+
+    public ProgramDto getProgram(Long id) {
+        return ProgramDto.from(programRepository.findByIdWithProgramFile(id).orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다.")));
+    }
 }

@@ -61,4 +61,17 @@ public class BookmarkService {
         .map(BookmarkDto::from)
         .collect(Collectors.toList());
   }
+
+    public boolean isBookmarked(String uniqueId, Long programId) {
+        User user =
+            userRepository
+                .findById(uniqueId)
+                .orElseThrow(() -> new DoNotExistException("해당 유저가 없습니다."));
+
+        Program program =
+            programRepository
+                .findById(programId)
+                .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+        return bookmarkRepository.existsByUserAndProgram(user, program);
+    }
 }

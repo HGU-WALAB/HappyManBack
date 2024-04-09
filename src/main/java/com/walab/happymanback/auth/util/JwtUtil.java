@@ -11,10 +11,11 @@ public class JwtUtil {
   private static final long EXPIRE_TIME_MS = 1000 * 60 * 60 * 2;
 
   // JWT Token 발급
-  public static String createToken(String uniqueId, String status, String secretKey) {
+  public static String createToken(String uniqueId, String status, String name ,String secretKey) {
     Claims claims = Jwts.claims();
     claims.put("uniqueId", uniqueId);
     claims.put("status", status);
+    claims.put("name", name);
 
     return Jwts.builder()
         .setClaims(claims)

@@ -34,14 +34,14 @@ public class AuthService {
       User newUser=User.from(dto);
       userRepository.save(User.from(dto));
         return AuthDto.builder()
-                .token(JwtUtil.createToken(newUser.getUniqueId(), newUser.getStatus().name(), SECRET_KEY))
+                .token(JwtUtil.createToken(newUser.getUniqueId(), newUser.getStatus().name(), newUser.getName() , SECRET_KEY))
                 .build();
     }else {
       user.get().update(dto);
       return AuthDto.builder()
               .token(
                       JwtUtil.createToken(
-                              user.get().getUniqueId(), user.get().getStatus().name(), SECRET_KEY))
+                              user.get().getUniqueId(), user.get().getStatus().name(), user.get().getName() , SECRET_KEY))
               .build();
     }
   }

@@ -4,6 +4,7 @@ import com.walab.happymanback.bookmark.service.BookmarkService;
 import com.walab.happymanback.file.service.FileService;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
 import com.walab.happymanback.program.controller.response.NotLoginProgramListResponse;
+import com.walab.happymanback.program.controller.response.ProgramDetailResponse;
 import com.walab.happymanback.program.controller.response.ProgramListResponse;
 import com.walab.happymanback.program.dto.ProgramDto;
 import com.walab.happymanback.program.service.ProgramService;
@@ -56,4 +57,12 @@ public class ProgramController {
     programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
     return ResponseEntity.ok(NotLoginProgramListResponse.from(programs));
   }
+
+  @GetMapping("/api/happyman/programs/{id}")
+    public ResponseEntity<ProgramDetailResponse> getProgram(@AuthenticationPrincipal String uniqueId, @PathVariable Long id) {
+        ProgramDto program = programService.getProgram(id);
+        program.getProgramFileDtos().forEach(programFileDto -> programFileDto.setStoredFilePath(fileService.getFile(programFileDto.getStoredFilePath())));
+        program.setImage(fileService.getFile(program.getImage()));
+        return ResponseEntity.ok(ProgramDetailResponse.from(program, bookmarkService.isBookmarked(uniqueId, id)));
+    }
 }

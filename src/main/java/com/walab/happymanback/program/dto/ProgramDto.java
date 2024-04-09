@@ -3,10 +3,10 @@ package com.walab.happymanback.program.dto;
 import com.walab.happymanback.category.dto.CategoryDto;
 import com.walab.happymanback.file.dto.FileDto;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.entity.Program;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,16 +26,12 @@ public class ProgramDto {
 
     private String information;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime applyStartDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime applyEndDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
     private String applicationForm;
@@ -72,5 +68,25 @@ public class ProgramDto {
             dto.setImage(imageDto.getStoredFilePath());
         }
         return dto;
+    }
+
+    public static ProgramDto from(Program program) {
+        return ProgramDto.builder()
+                .id(program.getId())
+                .name(program.getName())
+                .quota(program.getQuota())
+                .currentQuota(program.getCurrentQuota())
+                .information(program.getInformation())
+                .applyStartDate(program.getApplyStartDate())
+                .applyEndDate(program.getApplyEndDate())
+                .startDate(program.getStartDate())
+                .endDate(program.getEndDate())
+                .applicationForm(program.getApplicationForm())
+                .managerName(program.getManagerName())
+                .managerContact(program.getManagerContact())
+                .image(program.getImage())
+                .categoryDto(CategoryDto.from(program.getCategory()))
+                .programFileDtos(program.getFiles().stream().map(ProgramFileDto::from).collect(Collectors.toList()))
+                .build();
     }
 }
