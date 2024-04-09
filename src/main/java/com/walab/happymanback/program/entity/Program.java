@@ -61,7 +61,7 @@ public class Program extends BaseTime {
   @Column(name = "manager_contact", nullable = false, length = 50)
   private String managerContact;
 
-  @Column(name = "image", nullable = false, length = 300)
+  @Column(name = "image", length = 300)
   private String image;
 
   @OneToMany(

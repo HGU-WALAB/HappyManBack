@@ -12,9 +12,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Value("${custom.file.path}")
     private String FILE_PATH;
+
+    @Value("${custom.file.pattern}")
+    private String FILE_PATTERN;
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/file/**")
+        registry.addResourceHandler(FILE_PATTERN+"/**")
                 .addResourceLocations("file://" + FILE_PATH);
     }
 }

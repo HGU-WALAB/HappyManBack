@@ -48,7 +48,7 @@ public class ProgramDto {
     private List<ProgramFileDto> programFileDtos;
 
     public static ProgramDto from(AddProgramRequest request, FileDto imageDto, List<FileDto> fileDtos) {
-        return ProgramDto.builder()
+        ProgramDto dto=ProgramDto.builder()
                 .name(request.getName())
                 .quota(request.getQuota())
                 .currentQuota(request.getCurrentQuota())
@@ -61,9 +61,12 @@ public class ProgramDto {
                 .surveyForm(request.getSurveyForm())
                 .managerName(request.getManagerName())
                 .managerContact(request.getManagerContact())
-                .image(imageDto.getStoredFilePath())
                 .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
                 .programFileDtos(fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
                 .build();
+        if(imageDto!=null){
+            dto.setImage(imageDto.getStoredFilePath());
+        }
+        return dto;
     }
 }

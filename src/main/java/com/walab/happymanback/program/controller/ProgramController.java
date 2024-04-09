@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -42,13 +43,17 @@ public class ProgramController {
 
   @GetMapping("/api/happyman/programs")
   public ResponseEntity<ProgramListResponse> getPrograms(@AuthenticationPrincipal String uniqueId) {
+    List <ProgramDto> programs = programService.getPrograms();
+    programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
     return ResponseEntity.ok(
         ProgramListResponse.from(
-            programService.getPrograms(), bookmarkService.getBookmarks(uniqueId)));
+                programs, bookmarkService.getBookmarks(uniqueId)));
   }
 
   @GetMapping("/api/happyman/all/programs")
   public ResponseEntity<NotLoginProgramListResponse> getPrograms() {
-    return ResponseEntity.ok(NotLoginProgramListResponse.from(programService.getPrograms()));
+    List <ProgramDto> programs = programService.getPrograms();
+    programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
+    return ResponseEntity.ok(NotLoginProgramListResponse.from(programs));
   }
 }

@@ -12,10 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +20,13 @@ public class FileService {
   @Value("${custom.file.path}")
   private String FILE_PATH;
 
+  @Value("${custom.file.pattern}")
+  private String FILE_PATTERN;
+
   public FileDto uploadOneFile(MultipartFile file, String directory){
+    if (file.isEmpty()) {
+      return null;
+    }
     return uploadFile(file, makeDirectory(directory));
   }
 
@@ -58,9 +61,10 @@ public class FileService {
     Files.setPosixFilePermissions(Paths.get(directoryPath), perms);
   }
 
-  public List<FileDto> uploadFiles(List<MultipartFile> files, String dir) {
+  public List<FileDto> uploadFiles(List<MultipartFile> files, String filePath) {
     return files.stream()
-            .map(f -> uploadFile(f, makeDirectory(dir)))
+            .map(f -> uploadOneFile(f, filePath))
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
   }
 
@@ -98,5 +102,9 @@ public class FileService {
       name = fileName;
     }
     return name + "_" + UUID.randomUUID() + extension;
+  }
+
+  public String getFile(String filePath) {
+    return FILE_PATTERN + "/" +filePath;
   }
 }
