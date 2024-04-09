@@ -83,7 +83,6 @@ public class Program extends BaseTime {
             .startDate(dto.getStartDate())
             .endDate(dto.getEndDate())
             .applicationForm(dto.getApplicationForm())
-            .surveyForm(dto.getSurveyForm())
             .managerName(dto.getManagerName())
             .managerContact(dto.getManagerContact())
             .image(dto.getImage())

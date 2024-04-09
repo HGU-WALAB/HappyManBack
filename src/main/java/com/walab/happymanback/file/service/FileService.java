@@ -23,11 +23,11 @@ public class FileService {
   @Value("${custom.file.pattern}")
   private String FILE_PATTERN;
 
-  public FileDto uploadOneFile(MultipartFile file, String directory){
+  public FileDto uploadOneFile(MultipartFile file, String filePath){
     if (file.isEmpty()) {
       return null;
     }
-    return uploadFile(file, makeDirectory(directory));
+    return uploadFile(file, makeDirectory(filePath));
   }
 
   public FileDto uploadFile(MultipartFile file, String filePath) {
@@ -105,6 +105,9 @@ public class FileService {
   }
 
   public String getFile(String filePath) {
+    if (filePath == null) {
+      return null;
+    }
     return FILE_PATTERN + "/" +filePath;
   }
 }

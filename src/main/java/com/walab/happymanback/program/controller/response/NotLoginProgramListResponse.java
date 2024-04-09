@@ -6,15 +6,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Builder
 @Getter
 public class NotLoginProgramListResponse {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private List<Program> programs;
 
     public static NotLoginProgramListResponse from(List<ProgramDto> programDtos) {
@@ -36,8 +37,7 @@ public class NotLoginProgramListResponse {
         private String status;
         private String image;
 
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime applyEndDate;
+        private String applyEndDate;
 
         private static Program from(ProgramDto programDto) {
             Program program = new Program();
@@ -45,7 +45,7 @@ public class NotLoginProgramListResponse {
             program.categoryId = programDto.getCategoryDto().getId();
             program.name = programDto.getName();
             program.image = programDto.getImage();
-            program.applyEndDate = programDto.getApplyEndDate();
+            program.applyEndDate = programDto.getApplyEndDate().format(DATE_TIME_FORMATTER);
             program.status = evaluateStatus(programDto.getApplyStartDate(), programDto.getApplyEndDate()).getKorean();
             return program;
         }

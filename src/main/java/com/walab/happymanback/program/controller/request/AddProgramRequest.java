@@ -33,7 +33,6 @@ public class AddProgramRequest {
 
   private String applicationForm;
 
-  private String surveyForm;
 
   private String managerName;
 
