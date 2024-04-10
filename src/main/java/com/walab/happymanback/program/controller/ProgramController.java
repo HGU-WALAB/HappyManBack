@@ -3,6 +3,7 @@ package com.walab.happymanback.program.controller;
 import com.walab.happymanback.bookmark.service.BookmarkService;
 import com.walab.happymanback.file.service.FileService;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.controller.response.AdminProgramListResponse;
 import com.walab.happymanback.program.controller.response.NotLoginProgramListResponse;
 import com.walab.happymanback.program.controller.response.ProgramDetailResponse;
 import com.walab.happymanback.program.controller.response.ProgramListResponse;
@@ -64,5 +65,12 @@ public class ProgramController {
         program.getProgramFileDtos().forEach(programFileDto -> programFileDto.setStoredFilePath(fileService.getFile(programFileDto.getStoredFilePath())));
         program.setImage(fileService.getFile(program.getImage()));
         return ResponseEntity.ok(ProgramDetailResponse.from(program, bookmarkService.isBookmarked(uniqueId, id)));
+    }
+
+    @GetMapping("/api/happyman/admin/programs")
+    public ResponseEntity<AdminProgramListResponse> adminGetPrograms() {
+        List <ProgramDto> programs = programService.getPrograms();
+        programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
+        return ResponseEntity.ok(AdminProgramListResponse.from(programs));
     }
 }
