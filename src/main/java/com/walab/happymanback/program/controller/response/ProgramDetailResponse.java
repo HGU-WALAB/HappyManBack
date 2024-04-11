@@ -43,7 +43,10 @@ public class ProgramDetailResponse {
 
   private Boolean isBookmarked;
 
-  public static ProgramDetailResponse from(ProgramDto programDto, Boolean isBookmarked) {
+  private Boolean isApplied;
+
+  public static ProgramDetailResponse from(
+      ProgramDto programDto, Boolean isBookmarked, Boolean isApplied) {
     return ProgramDetailResponse.builder()
         .id(programDto.getId())
         .name(programDto.getName())
@@ -58,6 +61,7 @@ public class ProgramDetailResponse {
         .managerContact(programDto.getManagerContact())
         .image(programDto.getImage())
         .isBookmarked(isBookmarked)
+        .isApplied(isApplied)
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)
