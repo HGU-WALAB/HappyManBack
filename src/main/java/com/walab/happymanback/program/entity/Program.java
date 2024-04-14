@@ -76,7 +76,7 @@ public class Program extends BaseTime {
         Program.builder()
             .name(dto.getName())
             .quota(dto.getQuota())
-            .currentQuota(dto.getCurrentQuota())
+            .currentQuota(0)
             .information(dto.getInformation())
             .applyStartDate(dto.getApplyStartDate())
             .applyEndDate(dto.getApplyEndDate())

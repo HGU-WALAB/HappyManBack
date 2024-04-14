@@ -52,7 +52,6 @@ public class ProgramDto {
         ProgramDto dto=ProgramDto.builder()
                 .name(request.getName())
                 .quota(request.getQuota())
-                .currentQuota(request.getCurrentQuota())
                 .information(request.getInformation())
                 .applyStartDate(request.getApplyStartDate())
                 .applyEndDate(request.getApplyEndDate())

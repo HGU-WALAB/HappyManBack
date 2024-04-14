@@ -15,8 +15,6 @@ public class AddProgramRequest {
 
   private Integer quota;
 
-  private Integer currentQuota;
-
   private String information;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
