@@ -3,6 +3,7 @@ package com.walab.happymanback.program.dto;
 import com.walab.happymanback.category.dto.CategoryDto;
 import com.walab.happymanback.file.dto.FileDto;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.controller.request.UpdateProgramRequest;
 import com.walab.happymanback.program.entity.Program;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,6 +62,25 @@ public class ProgramDto {
                 .managerName(request.getManagerName())
                 .managerContact(request.getManagerContact())
                 .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
+                .programFileDtos(fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
+                .build();
+        if(imageDto!=null){
+            dto.setImage(imageDto.getStoredFilePath());
+        }
+        return dto;
+    }
+
+    public static ProgramDto from(UpdateProgramRequest request, FileDto imageDto, List<FileDto> fileDtos) {
+        ProgramDto dto=ProgramDto.builder()
+                .name(request.getName())
+                .quota(request.getQuota())
+                .information(request.getInformation())
+                .applyStartDate(request.getApplyStartDate())
+                .applyEndDate(request.getApplyEndDate())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .managerName(request.getManagerName())
+                .managerContact(request.getManagerContact())
                 .programFileDtos(fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
                 .build();
         if(imageDto!=null){

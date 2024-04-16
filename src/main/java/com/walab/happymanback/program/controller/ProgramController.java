@@ -4,6 +4,7 @@ import com.walab.happymanback.bookmark.service.BookmarkService;
 import com.walab.happymanback.file.service.FileService;
 import com.walab.happymanback.participant.service.ParticipantService;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.controller.request.UpdateProgramRequest;
 import com.walab.happymanback.program.controller.response.*;
 import com.walab.happymanback.program.dto.ProgramDto;
 import com.walab.happymanback.program.service.ProgramService;
@@ -93,5 +94,20 @@ public class ProgramController {
                     fileService.getFile(programFileDto.getStoredFilePath())));
     program.setImage(fileService.getFile(program.getImage()));
     return ResponseEntity.ok(AdminProgramDetailResponse.from(program));
+  }
+
+  @PatchMapping("/api/happyman/admin/programs/{id}")
+  public ResponseEntity<Void> updateProgram(
+      @PathVariable Long id,
+      @ModelAttribute UpdateProgramRequest request,
+      @RequestParam(value = "image", required = false) MultipartFile image,
+      @RequestParam(value = "file", required = false) List<MultipartFile> file) {
+    programService.updateProgram(
+        id,
+        ProgramDto.from(
+            request,
+            fileService.uploadOneFile(image, PROGRAM_IMAGE_DIR),
+            fileService.uploadFiles(file, PROGRAM_FILE_DIR)));
+    return ResponseEntity.ok().build();
   }
 }
