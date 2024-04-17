@@ -3,10 +3,7 @@ package com.walab.happymanback.bookmark.controller;
 import com.walab.happymanback.bookmark.controller.request.BookmarkRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.walab.happymanback.bookmark.service.BookmarkService;
 
 @RestController
@@ -20,9 +17,9 @@ public class BookmarkController {
     bookmarkService.createBookmark(uniqueId, request.getProgramId());
   }
 
-  @DeleteMapping("/api/happyman/bookmarks")
+  @DeleteMapping("/api/happyman/bookmarks/{programId}")
   public void deleteBookmark(
-      @RequestBody BookmarkRequest request, @AuthenticationPrincipal String uniqueId) {
-    bookmarkService.deleteBookmark(uniqueId, request.getProgramId());
+          @PathVariable Long programId, @AuthenticationPrincipal String uniqueId) {
+    bookmarkService.deleteBookmark(uniqueId, programId);
   }
 }

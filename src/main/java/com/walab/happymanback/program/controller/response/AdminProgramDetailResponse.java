@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Builder
 @Getter
-public class ProgramDetailResponse {
+public class AdminProgramDetailResponse {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -40,14 +40,9 @@ public class ProgramDetailResponse {
   private String image;
 
   private List<ProgramFile> programFiles;
-
-  private Boolean isBookmarked;
-
-  private Boolean isApplied;
-
-  public static ProgramDetailResponse from(
-      ProgramDto programDto, Boolean isBookmarked, Boolean isApplied) {
-    return ProgramDetailResponse.builder()
+  public static AdminProgramDetailResponse from(
+      ProgramDto programDto) {
+    return AdminProgramDetailResponse.builder()
         .id(programDto.getId())
         .name(programDto.getName())
         .quota(programDto.getQuota())
@@ -60,8 +55,6 @@ public class ProgramDetailResponse {
         .managerName(programDto.getManagerName())
         .managerContact(programDto.getManagerContact())
         .image(programDto.getImage())
-        .isBookmarked(isBookmarked)
-        .isApplied(isApplied)
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)

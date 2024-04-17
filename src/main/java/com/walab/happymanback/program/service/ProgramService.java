@@ -37,6 +37,11 @@ public class ProgramService {
                         .categoryDto(CategoryDto.from(program.getCategory()))
                         .name(program.getName())
                         .image(program.getImage())
+                        .startDate(program.getStartDate())
+                        .endDate(program.getEndDate())
+                        .quota(program.getQuota())
+                        .currentQuota(program.getCurrentQuota())
+                        .managerName(program.getManagerName())
                         .applyStartDate(program.getApplyStartDate())
                         .applyEndDate(program.getApplyEndDate())
                         .build()
@@ -45,5 +50,10 @@ public class ProgramService {
 
     public ProgramDto getProgram(Long id) {
         return ProgramDto.from(programRepository.findByIdWithProgramFile(id).orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다.")));
+    }
+
+    public void updateProgram(Long id, ProgramDto dto) {
+        Program program = programRepository.findById(id).orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+        program.update(dto);
     }
 }

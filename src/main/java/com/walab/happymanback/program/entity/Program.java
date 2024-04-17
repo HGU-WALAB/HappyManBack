@@ -76,7 +76,7 @@ public class Program extends BaseTime {
         Program.builder()
             .name(dto.getName())
             .quota(dto.getQuota())
-            .currentQuota(dto.getCurrentQuota())
+            .currentQuota(0)
             .information(dto.getInformation())
             .applyStartDate(dto.getApplyStartDate())
             .applyEndDate(dto.getApplyEndDate())
@@ -93,5 +93,25 @@ public class Program extends BaseTime {
             .map(programFileDto -> ProgramFile.from(newProgram, programFileDto))
             .collect(Collectors.toList()));
     return newProgram;
+  }
+
+  public void update(ProgramDto dto) {
+    this.name = dto.getName();
+    this.quota = dto.getQuota();
+    this.information = dto.getInformation();
+    this.applyStartDate = dto.getApplyStartDate();
+    this.applyEndDate = dto.getApplyEndDate();
+    this.startDate = dto.getStartDate();
+    this.endDate = dto.getEndDate();
+    this.managerName = dto.getManagerName();
+    this.managerContact = dto.getManagerContact();
+    this.image = dto.getImage() != null ? dto.getImage() : this.image;
+    if (!dto.getProgramFileDtos().isEmpty()) {
+      this.files.clear();
+      this.files.addAll(
+          dto.getProgramFileDtos().stream()
+              .map(programFileDto -> ProgramFile.from(this, programFileDto))
+              .collect(Collectors.toList()));
+    }
   }
 }
