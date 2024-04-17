@@ -56,7 +56,7 @@ public class AdminProgramListResponse {
             program.managerName = programDto.getManagerName();
             program.quota = programDto.getQuota();
             program.currentQuota = programDto.getCurrentQuota();
-            program.status = evaluateStatus(programDto.getApplyStartDate(), programDto.getApplyEndDate()).getKorean();
+            program.status = evaluateStatus(programDto.getStartDate(), programDto.getEndDate()).getKorean();
             return program;
         }
 
