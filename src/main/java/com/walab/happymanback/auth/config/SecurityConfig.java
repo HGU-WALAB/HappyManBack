@@ -29,7 +29,7 @@ public class SecurityConfig {
   private final AuthService authService;
 
   @Value("${custom.host.client}")
-  private String client;
+  private List <String> client;
 
   @Value("${custom.jwt.secret}")
   private String SECRET_KEY;
@@ -56,7 +56,7 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOrigins(List.of(client));
+    config.setAllowedOrigins(client);
     config.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "PUT"));
     config.setAllowedHeaders(Arrays.asList(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
     config.setAllowCredentials(true);
