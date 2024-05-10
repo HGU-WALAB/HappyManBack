@@ -15,4 +15,7 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
 
     @Query("SELECT p FROM Program p LEFT JOIN FETCH p.files WHERE p.id = :id")
     Optional<Program> findByIdWithProgramFile(Long id);
+
+    @Query("SELECT p FROM Program p JOIN FETCH p.category WHERE p.id = :id")
+    Optional<Program> findByIdWithCategory(Long id);
 }

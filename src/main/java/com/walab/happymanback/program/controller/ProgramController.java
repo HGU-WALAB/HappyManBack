@@ -45,7 +45,7 @@ public class ProgramController {
 
   @GetMapping("/api/happyman/programs")
   public ResponseEntity<ProgramListResponse> getPrograms(@AuthenticationPrincipal String uniqueId) {
-    List<ProgramDto> programs = programService.getPrograms();
+    List<ProgramDto> programs = programService.getProgramsWithCategory();
     programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
     return ResponseEntity.ok(
         ProgramListResponse.from(programs, bookmarkService.getBookmarks(uniqueId)));
@@ -53,7 +53,7 @@ public class ProgramController {
 
   @GetMapping("/api/happyman/all/programs")
   public ResponseEntity<NotLoginProgramListResponse> getPrograms() {
-    List<ProgramDto> programs = programService.getPrograms();
+    List<ProgramDto> programs = programService.getProgramsWithCategory();
     programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
     return ResponseEntity.ok(NotLoginProgramListResponse.from(programs));
   }
@@ -61,7 +61,7 @@ public class ProgramController {
   @GetMapping("/api/happyman/programs/{id}")
   public ResponseEntity<ProgramDetailResponse> getProgram(
       @AuthenticationPrincipal String uniqueId, @PathVariable Long id) {
-    ProgramDto program = programService.getProgram(id);
+    ProgramDto program = programService.getProgramWithFile(id);
     program
         .getProgramFileDtos()
         .forEach(
@@ -78,14 +78,14 @@ public class ProgramController {
 
   @GetMapping("/api/happyman/admin/programs")
   public ResponseEntity<AdminProgramListResponse> adminGetPrograms() {
-    List<ProgramDto> programs = programService.getPrograms();
+    List<ProgramDto> programs = programService.getProgramsWithCategory();
     programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
     return ResponseEntity.ok(AdminProgramListResponse.from(programs));
   }
 
   @GetMapping("/api/happyman/admin/programs/{id}")
   public ResponseEntity<AdminProgramDetailResponse> adminGetProgram(@PathVariable Long id) {
-    ProgramDto program = programService.getProgram(id);
+    ProgramDto program = programService.getProgramWithFile(id);
     program
         .getProgramFileDtos()
         .forEach(
@@ -109,5 +109,12 @@ public class ProgramController {
             fileService.uploadOneFile(image, PROGRAM_IMAGE_DIR),
             fileService.uploadFiles(file, PROGRAM_FILE_DIR)));
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/api/happyman/programs/{id}/application")
+  public ResponseEntity<ApplicationResponse> getApplicationForm(@PathVariable Long id) {
+    ProgramDto program = programService.getProgramWithCategory(id);
+    program.setImage(fileService.getFile(program.getImage()));
+    return ResponseEntity.ok(ApplicationResponse.from(program));
   }
 }
