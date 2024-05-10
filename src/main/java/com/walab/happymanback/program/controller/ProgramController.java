@@ -2,8 +2,10 @@ package com.walab.happymanback.program.controller;
 
 import com.walab.happymanback.bookmark.service.BookmarkService;
 import com.walab.happymanback.file.service.FileService;
+import com.walab.happymanback.participant.dto.ParticipantDto;
 import com.walab.happymanback.participant.service.ParticipantService;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
+import com.walab.happymanback.program.controller.request.ProgramApplyRequest;
 import com.walab.happymanback.program.controller.request.UpdateProgramRequest;
 import com.walab.happymanback.program.controller.response.*;
 import com.walab.happymanback.program.dto.ProgramDto;
@@ -116,5 +118,19 @@ public class ProgramController {
     ProgramDto program = programService.getProgramWithCategory(id);
     program.setImage(fileService.getFile(program.getImage()));
     return ResponseEntity.ok(ApplicationResponse.from(program));
+  }
+
+  @PostMapping("/api/happyman/programs/{id}/apply")
+  public ResponseEntity<Void> applyProgram(
+      @RequestBody ProgramApplyRequest request,
+      @PathVariable Long id,
+      @AuthenticationPrincipal String uniqueId) {
+    participantService.applyProgram(
+        ParticipantDto.builder()
+            .userId(uniqueId)
+            .programId(id)
+            .applicationForm(request.getApplicationForm())
+            .build());
+    return ResponseEntity.ok().build();
   }
 }
