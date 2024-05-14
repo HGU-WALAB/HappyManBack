@@ -3,6 +3,8 @@ package com.walab.happymanback.program.entity;
 import com.walab.happymanback.base.entity.BaseTime;
 import com.walab.happymanback.category.entity.Category;
 import com.walab.happymanback.program.dto.ProgramDto;
+import com.walab.happymanback.program.exception.NotApplyPeriodException;
+import com.walab.happymanback.program.exception.QuotaExceededException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -112,6 +114,22 @@ public class Program extends BaseTime {
           dto.getProgramFileDtos().stream()
               .map(programFileDto -> ProgramFile.from(this, programFileDto))
               .collect(Collectors.toList()));
+    }
+  }
+
+  public void validateApplyDate() {
+    if (LocalDateTime.now().isBefore(applyStartDate) || LocalDateTime.now().isAfter(applyEndDate)) {
+      throw new NotApplyPeriodException();
+    }
+  }
+
+  public void addCurrentQuota(Integer count) {
+    this.currentQuota += count;
+  }
+
+  public void validateCurrentQuota() {
+    if (quota!=null && currentQuota >= quota) {
+      throw new QuotaExceededException();
     }
   }
 }
