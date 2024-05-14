@@ -43,5 +43,8 @@ public class ParticipantService {
             userRepository
                 .findById(dto.getUserId())
                 .orElseThrow(() -> new DoNotExistException("해당 유저가 없습니다."))));
+
+    program.validateCurrentQuota();
+    program.addCurrentQuota(1);
   }
 }
