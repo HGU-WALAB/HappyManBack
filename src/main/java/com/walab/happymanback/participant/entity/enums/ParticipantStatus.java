@@ -18,7 +18,7 @@ public enum ParticipantStatus {
 
   public static ParticipantStatus from(String status) {
     for (ParticipantStatus participantStatus : ParticipantStatus.values()) {
-      if (participantStatus.name().equals(status)) {
+      if (participantStatus.getKorean().equals(status)) {
         return participantStatus;
       }
     }

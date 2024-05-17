@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -44,6 +46,16 @@ public class ParticipantService {
 
     if (isParticipant(dto.getProgram().getId(), dto.getUser().getUniqueId())) {
       throw new AlreadyAppliedException();
+    }
+  }
+
+  public void changeParticipantStatus(List<Long> ids, String status) {
+    for (Long id : ids) {
+      Participant participant =
+          participantRepository
+              .findById(id)
+              .orElseThrow(() -> new DoNotExistException("해당하는 참가자가 없습니다."));
+      participant.changeStatus(status);
     }
   }
 }

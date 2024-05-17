@@ -31,6 +31,8 @@ public class ApplicantListResponse {
   @Builder
   @Getter
   private static class Applicant {
+    private Long id;
+
     private String uniqueId;
 
     private String name;
@@ -47,6 +49,7 @@ public class ApplicantListResponse {
 
     public static Applicant from(ParticipantDto dto) {
       return Applicant.builder()
+          .id(dto.getId())
           .uniqueId(dto.getUser().getUniqueId())
           .name(dto.getUser().getName())
           .email(dto.getUser().getEmail())

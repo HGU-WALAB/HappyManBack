@@ -12,34 +12,38 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class Participant extends BaseTime {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "program_id", nullable = false)
-    private Program program;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "program_id", nullable = false)
+  private Program program;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable = false)
-    private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ParticipantStatus status;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false)
+  private ParticipantStatus status;
 
-    @Column(name = "application_form", columnDefinition = "TEXT")
-    private String applicationForm;
+  @Column(name = "application_form", columnDefinition = "TEXT")
+  private String applicationForm;
 
-    @Column(name = "survey_form", columnDefinition = "TEXT")
-    private String surveyForm;
+  @Column(name = "survey_form", columnDefinition = "TEXT")
+  private String surveyForm;
 
-    public static Participant apply(ParticipantDto dto, Program program, User user) {
-        Participant participant = new Participant();
-        participant.program = program;
-        participant.user = user;
-        participant.status = ParticipantStatus.WAITING;
-        participant.applicationForm = dto.getApplicationForm();
-        return participant;
-    }
+  public static Participant apply(ParticipantDto dto, Program program, User user) {
+    Participant participant = new Participant();
+    participant.program = program;
+    participant.user = user;
+    participant.status = ParticipantStatus.WAITING;
+    participant.applicationForm = dto.getApplicationForm();
+    return participant;
+  }
+
+  public void changeStatus(String status) {
+    this.status = ParticipantStatus.from(status);
+  }
 }
