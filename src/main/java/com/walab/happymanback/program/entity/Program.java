@@ -2,6 +2,7 @@ package com.walab.happymanback.program.entity;
 
 import com.walab.happymanback.base.entity.BaseTime;
 import com.walab.happymanback.category.entity.Category;
+import com.walab.happymanback.participant.entity.Participant;
 import com.walab.happymanback.program.dto.ProgramDto;
 import com.walab.happymanback.program.exception.NotApplyPeriodException;
 import com.walab.happymanback.program.exception.QuotaExceededException;
@@ -73,6 +74,9 @@ public class Program extends BaseTime {
       orphanRemoval = true)
   private List<ProgramFile> files;
 
+  @OneToMany(mappedBy = "program", fetch = FetchType.LAZY)
+  private List<Participant> participants;
+
   public static Program from(ProgramDto dto, Category category) {
     Program newProgram =
         Program.builder()
@@ -128,7 +132,7 @@ public class Program extends BaseTime {
   }
 
   public void validateCurrentQuota() {
-    if (quota!=null && currentQuota >= quota) {
+    if (quota != null && currentQuota >= quota) {
       throw new QuotaExceededException();
     }
   }

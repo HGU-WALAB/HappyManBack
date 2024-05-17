@@ -5,10 +5,12 @@ import com.walab.happymanback.participant.dto.ParticipantDto;
 import com.walab.happymanback.participant.entity.enums.ParticipantStatus;
 import com.walab.happymanback.program.entity.Program;
 import com.walab.happymanback.user.entity.User;
+import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class Participant extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

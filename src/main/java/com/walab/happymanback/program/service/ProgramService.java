@@ -39,7 +39,7 @@ public class ProgramService {
         programRepository
             .findByIdWithProgramFile(id)
             .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
-    return ProgramDto.from(program, program.getFiles());
+    return ProgramDto.withFile(program);
   }
 
   public void updateProgram(Long id, ProgramDto dto) {
@@ -59,5 +59,13 @@ public class ProgramService {
       Program program = programRepository.findByIdWithCategory(id)
               .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
     return ProgramDto.from(program, program.getCategory());
+  }
+
+  public ProgramDto getProgramWithParticipant(Long id) {
+    Program program =
+        programRepository
+            .findByIdWithParticipant(id)
+            .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+    return ProgramDto.withParticipant(program);
   }
 }

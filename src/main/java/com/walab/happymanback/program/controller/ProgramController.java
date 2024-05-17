@@ -125,12 +125,13 @@ public class ProgramController {
       @RequestBody ProgramApplyRequest request,
       @PathVariable Long id,
       @AuthenticationPrincipal String uniqueId) {
-    participantService.applyProgram(
-        ParticipantDto.builder()
-            .userId(uniqueId)
-            .programId(id)
-            .applicationForm(request.getApplicationForm())
-            .build());
+    participantService.applyProgram(ParticipantDto.from(request, uniqueId, id));
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/api/happyman/admin/programs/{id}/applicants")
+  public ResponseEntity<ApplicantListResponse> getApplicants(@PathVariable Long id) {
+    return ResponseEntity.ok(
+        ApplicantListResponse.from(programService.getProgramWithParticipant(id)));
   }
 }

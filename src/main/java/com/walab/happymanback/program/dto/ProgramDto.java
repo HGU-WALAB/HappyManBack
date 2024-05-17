@@ -3,10 +3,10 @@ package com.walab.happymanback.program.dto;
 import com.walab.happymanback.category.dto.CategoryDto;
 import com.walab.happymanback.category.entity.Category;
 import com.walab.happymanback.file.dto.FileDto;
+import com.walab.happymanback.participant.dto.ParticipantDto;
 import com.walab.happymanback.program.controller.request.AddProgramRequest;
 import com.walab.happymanback.program.controller.request.UpdateProgramRequest;
 import com.walab.happymanback.program.entity.Program;
-import com.walab.happymanback.program.entity.ProgramFile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +50,8 @@ public class ProgramDto {
   private CategoryDto categoryDto;
 
   private List<ProgramFileDto> programFileDtos;
+
+  private List<ParticipantDto> participants;
 
   public static ProgramDto from(
       AddProgramRequest request, FileDto imageDto, List<FileDto> fileDtos) {
@@ -134,7 +136,7 @@ public class ProgramDto {
         .build();
   }
 
-  public static ProgramDto from(Program program, List<ProgramFile> programFiles) {
+  public static ProgramDto withFile(Program program) {
     return ProgramDto.builder()
         .id(program.getId())
         .name(program.getName())
@@ -150,7 +152,29 @@ public class ProgramDto {
         .managerContact(program.getManagerContact())
         .image(program.getImage())
         .programFileDtos(
-            programFiles.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
+            program.getFiles().stream().map(ProgramFileDto::from).collect(Collectors.toList()))
         .build();
+  }
+
+  public static ProgramDto withParticipant(Program program) {
+    return ProgramDto.builder()
+            .id(program.getId())
+            .name(program.getName())
+            .quota(program.getQuota())
+            .currentQuota(program.getCurrentQuota())
+            .information(program.getInformation())
+            .applyStartDate(program.getApplyStartDate())
+            .applyEndDate(program.getApplyEndDate())
+            .startDate(program.getStartDate())
+            .endDate(program.getEndDate())
+            .applicationForm(program.getApplicationForm())
+            .managerName(program.getManagerName())
+            .managerContact(program.getManagerContact())
+            .image(program.getImage())
+            .participants(
+                    program.getParticipants().stream()
+                            .map(ParticipantDto::from)
+                            .collect(Collectors.toList()))
+            .build();
   }
 }
