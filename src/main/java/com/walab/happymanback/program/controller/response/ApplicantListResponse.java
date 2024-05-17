@@ -18,7 +18,13 @@ public class ApplicantListResponse {
     return ApplicantListResponse.builder()
         .applicationForm(dto.getApplicationForm())
         .applicants(
-            dto.getParticipants().stream().map(Applicant::from).collect(Collectors.toList()))
+            dto.getParticipants().stream()
+                .filter(
+                    participant ->
+                        "대기".equals(participant.getStatus())
+                            || "거절".equals(participant.getStatus()))
+                .map(Applicant::from)
+                .collect(Collectors.toList()))
         .build();
   }
 
@@ -37,6 +43,8 @@ public class ApplicantListResponse {
 
     private String applicationForm;
 
+    private String status;
+
     public static Applicant from(ParticipantDto dto) {
       return Applicant.builder()
           .uniqueId(dto.getUser().getUniqueId())
@@ -45,6 +53,7 @@ public class ApplicantListResponse {
           .semester(dto.getUser().getSemester())
           .major1(dto.getUser().getMajor1())
           .applicationForm(dto.getApplicationForm())
+          .status(dto.getStatus())
           .build();
     }
   }

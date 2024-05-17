@@ -14,6 +14,7 @@ public class ParticipantDto {
   private UserDto user;
   private ProgramDto program;
   private String applicationForm;
+  private String status;
 
   public static ParticipantDto from(ProgramApplyRequest request, String uniqueId, Long programId) {
     return ParticipantDto.builder()
@@ -29,6 +30,7 @@ public class ParticipantDto {
         .user(UserDto.from(participant.getUser()))
         .program(ProgramDto.from(participant.getProgram()))
         .applicationForm(participant.getApplicationForm())
+        .status(participant.getStatus().getKorean())
         .build();
   }
 }
