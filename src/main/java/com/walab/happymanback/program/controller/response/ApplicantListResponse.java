@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 @Getter
 public class ApplicantListResponse {
   private String applicationForm;
+  private Integer currentQuota;
+  private Integer quota;
 
   private List<Applicant> applicants;
 
@@ -25,6 +27,8 @@ public class ApplicantListResponse {
                             || "거절".equals(participant.getStatus()))
                 .map(Applicant::from)
                 .collect(Collectors.toList()))
+        .currentQuota(dto.getCurrentQuota())
+        .quota(dto.getQuota())
         .build();
   }
 

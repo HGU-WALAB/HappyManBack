@@ -136,4 +136,8 @@ public class Program extends BaseTime {
       throw new QuotaExceededException();
     }
   }
+
+  public void clearFiles() {
+    this.files.clear();
+  }
 }

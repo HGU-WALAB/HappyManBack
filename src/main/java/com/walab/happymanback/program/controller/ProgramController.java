@@ -134,4 +134,10 @@ public class ProgramController {
     return ResponseEntity.ok(
         ApplicantListResponse.from(programService.getProgramWithParticipant(id)));
   }
+
+  @DeleteMapping("/api/happyman/admin/programs")
+  public ResponseEntity<Void> deleteProgram(@RequestParam List<Long> ids) {
+    programService.deletePrograms(ids);
+    return ResponseEntity.ok().build();
+  }
 }

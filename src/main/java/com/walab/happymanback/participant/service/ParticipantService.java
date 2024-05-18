@@ -27,6 +27,9 @@ public class ParticipantService {
   }
 
   public void applyProgram(ParticipantDto dto) {
+    if (isParticipant(dto.getProgram().getId(), dto.getUser().getUniqueId())) {
+      throw new AlreadyAppliedException();
+    }
     Program program =
         programRepository
             .findById(dto.getProgram().getId())
@@ -43,10 +46,6 @@ public class ParticipantService {
             userRepository
                 .findById(dto.getUser().getUniqueId())
                 .orElseThrow(() -> new DoNotExistException("해당 유저가 없습니다."))));
-
-    if (isParticipant(dto.getProgram().getId(), dto.getUser().getUniqueId())) {
-      throw new AlreadyAppliedException();
-    }
   }
 
   public void changeParticipantStatus(List<Long> ids, String status) {
