@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,26 +27,34 @@ public class ParticipantService {
   }
 
   public void applyProgram(ParticipantDto dto) {
-    if (isParticipant(dto.getProgramId(), dto.getUserId())) {
+    if (isParticipant(dto.getProgram().getId(), dto.getUser().getUniqueId())) {
       throw new AlreadyAppliedException();
     }
-
     Program program =
         programRepository
-            .findById(dto.getProgramId())
+            .findById(dto.getProgram().getId())
             .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
 
     program.validateApplyDate();
+    program.validateCurrentQuota();
+    program.addCurrentQuota(1);
 
     participantRepository.save(
         Participant.apply(
             dto,
             program,
             userRepository
-                .findById(dto.getUserId())
+                .findById(dto.getUser().getUniqueId())
                 .orElseThrow(() -> new DoNotExistException("해당 유저가 없습니다."))));
+  }
 
-    program.validateCurrentQuota();
-    program.addCurrentQuota(1);
+  public void changeParticipantStatus(List<Long> ids, String status) {
+    for (Long id : ids) {
+      Participant participant =
+          participantRepository
+              .findById(id)
+              .orElseThrow(() -> new DoNotExistException("해당하는 참가자가 없습니다."));
+      participant.changeStatus(status);
+    }
   }
 }

@@ -2,6 +2,7 @@ package com.walab.happymanback.program.service;
 
 import com.walab.happymanback.base.exception.DoNotExistException;
 import com.walab.happymanback.category.repository.CategoryRepository;
+import com.walab.happymanback.participant.repository.ParticipantRepository;
 import com.walab.happymanback.program.dto.ProgramDto;
 import com.walab.happymanback.program.entity.Program;
 import com.walab.happymanback.program.repository.ProgramRepository;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class ProgramService {
   private final CategoryRepository categoryRepository;
   private final ProgramRepository programRepository;
+  private final ParticipantRepository participantRepository;
 
   public void createProgram(ProgramDto dto) {
     programRepository.save(
@@ -39,7 +41,7 @@ public class ProgramService {
         programRepository
             .findByIdWithProgramFile(id)
             .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
-    return ProgramDto.from(program, program.getFiles());
+    return ProgramDto.withFile(program);
   }
 
   public void updateProgram(Long id, ProgramDto dto) {
@@ -56,8 +58,30 @@ public class ProgramService {
   }
 
   public ProgramDto getProgramWithCategory(Long id) {
-      Program program = programRepository.findByIdWithCategory(id)
-              .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+    Program program =
+        programRepository
+            .findByIdWithCategory(id)
+            .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
     return ProgramDto.from(program, program.getCategory());
+  }
+
+  public ProgramDto getProgramWithParticipant(Long id) {
+    Program program =
+        programRepository
+            .findByIdWithParticipant(id)
+            .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+    return ProgramDto.withParticipant(program);
+  }
+
+  public void deletePrograms(List<Long> ids) {
+    for (Long id : ids) {
+      Program program =
+          programRepository
+              .findById(id)
+              .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+      program.clearFiles();
+      participantRepository.deleteByProgramId(id);
+      programRepository.delete(program);
+    }
   }
 }
