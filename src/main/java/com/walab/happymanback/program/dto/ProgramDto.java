@@ -92,6 +92,7 @@ public class ProgramDto {
             .endDate(request.getEndDate())
             .managerName(request.getManagerName())
             .managerContact(request.getManagerContact())
+            .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
             .programFileDtos(
                 fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
             .build();
