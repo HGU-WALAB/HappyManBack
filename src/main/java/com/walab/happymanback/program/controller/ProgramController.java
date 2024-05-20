@@ -140,4 +140,10 @@ public class ProgramController {
     programService.deletePrograms(ids);
     return ResponseEntity.ok().build();
   }
+
+  @GetMapping("/api/happyman/admin/programs/{id}/participants")
+  public ResponseEntity<ParticipantListResponse> getParticipants(@PathVariable Long id) {
+    return ResponseEntity.ok(
+            ParticipantListResponse.from(programService.getProgramWithParticipant(id)));
+  }
 }
