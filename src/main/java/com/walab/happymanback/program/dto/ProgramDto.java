@@ -53,6 +53,8 @@ public class ProgramDto {
 
   private List<ParticipantDto> participants;
 
+  private LocalDateTime createdDate;
+
   public static ProgramDto from(
       AddProgramRequest request, FileDto imageDto, List<FileDto> fileDtos) {
     ProgramDto dto =
@@ -114,6 +116,7 @@ public class ProgramDto {
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
         .image(program.getImage())
+        .createdDate(program.getCreatedDate())
         .build();
   }
 
@@ -132,6 +135,7 @@ public class ProgramDto {
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
         .image(program.getImage())
+        .createdDate(program.getCreatedDate())
         .categoryDto(CategoryDto.from(category))
         .build();
   }
@@ -151,6 +155,7 @@ public class ProgramDto {
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
         .image(program.getImage())
+        .createdDate(program.getCreatedDate())
         .programFileDtos(
             program.getFiles().stream().map(ProgramFileDto::from).collect(Collectors.toList()))
         .build();
@@ -158,23 +163,24 @@ public class ProgramDto {
 
   public static ProgramDto withParticipant(Program program) {
     return ProgramDto.builder()
-            .id(program.getId())
-            .name(program.getName())
-            .quota(program.getQuota())
-            .currentQuota(program.getCurrentQuota())
-            .information(program.getInformation())
-            .applyStartDate(program.getApplyStartDate())
-            .applyEndDate(program.getApplyEndDate())
-            .startDate(program.getStartDate())
-            .endDate(program.getEndDate())
-            .applicationForm(program.getApplicationForm())
-            .managerName(program.getManagerName())
-            .managerContact(program.getManagerContact())
-            .image(program.getImage())
-            .participants(
-                    program.getParticipants().stream()
-                            .map(ParticipantDto::from)
-                            .collect(Collectors.toList()))
-            .build();
+        .id(program.getId())
+        .name(program.getName())
+        .quota(program.getQuota())
+        .currentQuota(program.getCurrentQuota())
+        .information(program.getInformation())
+        .applyStartDate(program.getApplyStartDate())
+        .applyEndDate(program.getApplyEndDate())
+        .startDate(program.getStartDate())
+        .endDate(program.getEndDate())
+        .applicationForm(program.getApplicationForm())
+        .managerName(program.getManagerName())
+        .managerContact(program.getManagerContact())
+        .image(program.getImage())
+        .createdDate(program.getCreatedDate())
+        .participants(
+            program.getParticipants().stream()
+                .map(ParticipantDto::from)
+                .collect(Collectors.toList()))
+        .build();
   }
 }
