@@ -146,4 +146,11 @@ public class ProgramController {
     return ResponseEntity.ok(
             ParticipantListResponse.from(programService.getProgramWithParticipant(id)));
   }
+
+  @GetMapping("/api/happyman/programs/bookmarked")
+    public ResponseEntity<BookmarkedProgramListResponse> getBookmarkedPrograms(@AuthenticationPrincipal String uniqueId) {
+        List<ProgramDto> programs = programService.getBookmarkedPrograms(uniqueId);
+        programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
+        return ResponseEntity.ok(BookmarkedProgramListResponse.from(programs));
+    }
 }

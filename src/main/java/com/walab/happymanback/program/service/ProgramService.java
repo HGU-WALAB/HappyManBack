@@ -91,4 +91,10 @@ public class ProgramService {
             .findByIdWithAll(id)
             .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다.")));
   }
+
+  public List<ProgramDto> getBookmarkedPrograms(String uniqueId) {
+    return programRepository.findAllIsBookmarked(uniqueId).stream()
+        .map(ProgramDto::from)
+        .collect(Collectors.toList());
+  }
 }
