@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -56,5 +57,11 @@ public class ParticipantService {
               .orElseThrow(() -> new DoNotExistException("해당하는 참가자가 없습니다."));
       participant.changeStatus(status);
     }
+  }
+
+  public List<ParticipantDto> getParticipantsFrom(String uniqueId) {
+    return participantRepository.findAllByUniqueId(uniqueId).stream()
+        .map(ParticipantDto::fromWithoutUser)
+        .collect(Collectors.toList());
   }
 }

@@ -33,4 +33,14 @@ public class ParticipantDto {
         .status(participant.getStatus().getKorean())
         .build();
   }
+
+  public static ParticipantDto fromWithoutUser(Participant participant) {
+    return ParticipantDto.builder()
+            .id(participant.getId())
+            .program(ProgramDto.from(participant.getProgram()))
+            .applicationForm(participant.getApplicationForm())
+            .status(participant.getStatus().getKorean())
+            .build();
+  }
+
 }
