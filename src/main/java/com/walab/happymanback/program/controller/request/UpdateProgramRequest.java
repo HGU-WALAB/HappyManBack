@@ -32,4 +32,6 @@ public class UpdateProgramRequest {
     private String managerName;
 
     private String managerContact;
+
+    private Long categoryId;
 }

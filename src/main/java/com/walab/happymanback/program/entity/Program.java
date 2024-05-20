@@ -1,6 +1,7 @@
 package com.walab.happymanback.program.entity;
 
 import com.walab.happymanback.base.entity.BaseTime;
+import com.walab.happymanback.bookmark.entity.Bookmark;
 import com.walab.happymanback.category.entity.Category;
 import com.walab.happymanback.participant.entity.Participant;
 import com.walab.happymanback.program.dto.ProgramDto;
@@ -76,6 +77,9 @@ public class Program extends BaseTime {
 
   @OneToMany(mappedBy = "program", fetch = FetchType.LAZY)
   private List<Participant> participants;
+
+  @OneToMany(mappedBy = "program", fetch = FetchType.LAZY)
+  private List<Bookmark> bookmarks;
 
   public static Program from(ProgramDto dto, Category category) {
     Program newProgram =

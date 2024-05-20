@@ -47,6 +47,12 @@ public class ProgramService {
   public void updateProgram(Long id, ProgramDto dto) {
     Program program =
         programRepository.findById(id).orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+    if (dto.getCategoryDto().getId() != null) {
+      program.setCategory(
+          categoryRepository
+              .findById(dto.getCategoryDto().getId())
+              .orElseThrow(() -> new DoNotExistException("해당 카테고리가 없습니다.")));
+    }
     program.update(dto);
   }
 
@@ -83,5 +89,18 @@ public class ProgramService {
       participantRepository.deleteByProgramId(id);
       programRepository.delete(program);
     }
+  }
+
+  public ProgramDto getProgramWithAll(Long id) {
+    return ProgramDto.withAll(
+        programRepository
+            .findByIdWithAll(id)
+            .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다.")));
+  }
+
+  public List<ProgramDto> getBookmarkedPrograms(String uniqueId) {
+    return programRepository.findAllIsBookmarked(uniqueId).stream()
+        .map(ProgramDto::from)
+        .collect(Collectors.toList());
   }
 }

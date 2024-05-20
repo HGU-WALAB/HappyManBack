@@ -87,7 +87,7 @@ public class ProgramController {
 
   @GetMapping("/api/happyman/admin/programs/{id}")
   public ResponseEntity<AdminProgramDetailResponse> adminGetProgram(@PathVariable Long id) {
-    ProgramDto program = programService.getProgramWithFile(id);
+    ProgramDto program = programService.getProgramWithAll(id);
     program
         .getProgramFileDtos()
         .forEach(
@@ -140,4 +140,17 @@ public class ProgramController {
     programService.deletePrograms(ids);
     return ResponseEntity.ok().build();
   }
+
+  @GetMapping("/api/happyman/admin/programs/{id}/participants")
+  public ResponseEntity<ParticipantListResponse> getParticipants(@PathVariable Long id) {
+    return ResponseEntity.ok(
+            ParticipantListResponse.from(programService.getProgramWithParticipant(id)));
+  }
+
+  @GetMapping("/api/happyman/programs/bookmarked")
+    public ResponseEntity<BookmarkedProgramListResponse> getBookmarkedPrograms(@AuthenticationPrincipal String uniqueId) {
+        List<ProgramDto> programs = programService.getBookmarkedPrograms(uniqueId);
+        programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
+        return ResponseEntity.ok(BookmarkedProgramListResponse.from(programs));
+    }
 }

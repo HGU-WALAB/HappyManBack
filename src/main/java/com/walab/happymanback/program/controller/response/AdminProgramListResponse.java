@@ -42,6 +42,7 @@ public class AdminProgramListResponse {
         private Integer quota;
         private Integer currentQuota;
         private String status;
+        private LocalDateTime createdDate;
 
         private static Program from(ProgramDto programDto) {
             Program program = new Program();
