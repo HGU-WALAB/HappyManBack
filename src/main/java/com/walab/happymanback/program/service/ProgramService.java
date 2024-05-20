@@ -84,4 +84,11 @@ public class ProgramService {
       programRepository.delete(program);
     }
   }
+
+  public ProgramDto getProgramWithAll(Long id) {
+    return ProgramDto.withAll(
+        programRepository
+            .findByIdWithAll(id)
+            .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다.")));
+  }
 }

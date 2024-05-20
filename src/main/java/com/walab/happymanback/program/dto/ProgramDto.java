@@ -183,4 +183,30 @@ public class ProgramDto {
                 .collect(Collectors.toList()))
         .build();
   }
+
+  public static ProgramDto withAll(Program program) {
+    return ProgramDto.builder()
+        .id(program.getId())
+        .name(program.getName())
+        .quota(program.getQuota())
+        .currentQuota(program.getCurrentQuota())
+        .information(program.getInformation())
+        .applyStartDate(program.getApplyStartDate())
+        .applyEndDate(program.getApplyEndDate())
+        .startDate(program.getStartDate())
+        .endDate(program.getEndDate())
+        .applicationForm(program.getApplicationForm())
+        .managerName(program.getManagerName())
+        .managerContact(program.getManagerContact())
+        .image(program.getImage())
+        .createdDate(program.getCreatedDate())
+        .categoryDto(CategoryDto.from(program.getCategory()))
+        .programFileDtos(
+            program.getFiles().stream().map(ProgramFileDto::from).collect(Collectors.toList()))
+        .participants(
+            program.getParticipants().stream()
+                .map(ParticipantDto::from)
+                .collect(Collectors.toList()))
+        .build();
+  }
 }

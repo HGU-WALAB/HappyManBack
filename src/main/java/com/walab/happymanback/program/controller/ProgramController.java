@@ -87,7 +87,7 @@ public class ProgramController {
 
   @GetMapping("/api/happyman/admin/programs/{id}")
   public ResponseEntity<AdminProgramDetailResponse> adminGetProgram(@PathVariable Long id) {
-    ProgramDto program = programService.getProgramWithFile(id);
+    ProgramDto program = programService.getProgramWithAll(id);
     program
         .getProgramFileDtos()
         .forEach(
