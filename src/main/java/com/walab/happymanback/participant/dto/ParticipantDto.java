@@ -15,6 +15,7 @@ public class ParticipantDto {
   private ProgramDto program;
   private String applicationForm;
   private String status;
+  private Integer semester;
 
   public static ParticipantDto from(ProgramApplyRequest request, String uniqueId, Long programId) {
     return ParticipantDto.builder()
@@ -31,16 +32,17 @@ public class ParticipantDto {
         .program(ProgramDto.from(participant.getProgram()))
         .applicationForm(participant.getApplicationForm())
         .status(participant.getStatus().getKorean())
+        .semester(participant.getSemester())
         .build();
   }
 
   public static ParticipantDto fromWithoutUser(Participant participant) {
     return ParticipantDto.builder()
-            .id(participant.getId())
-            .program(ProgramDto.from(participant.getProgram()))
-            .applicationForm(participant.getApplicationForm())
-            .status(participant.getStatus().getKorean())
-            .build();
+        .id(participant.getId())
+        .program(ProgramDto.from(participant.getProgram()))
+        .applicationForm(participant.getApplicationForm())
+        .status(participant.getStatus().getKorean())
+        .semester(participant.getSemester())
+        .build();
   }
-
 }
