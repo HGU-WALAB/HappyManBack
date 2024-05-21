@@ -1,6 +1,7 @@
 package com.walab.happymanback.participant.service;
 
 import com.walab.happymanback.base.exception.DoNotExistException;
+import com.walab.happymanback.base.exception.UnauthorizedDeletionException;
 import com.walab.happymanback.participant.dto.ParticipantDto;
 import com.walab.happymanback.participant.entity.Participant;
 import com.walab.happymanback.participant.exception.AlreadyAppliedException;
@@ -63,5 +64,21 @@ public class ParticipantService {
     return participantRepository.findAllByUniqueId(uniqueId).stream()
         .map(ParticipantDto::fromWithoutUser)
         .collect(Collectors.toList());
+  }
+
+  public void deleteParticipant(Long id, String uniqueId) {
+    Participant participant =
+        participantRepository
+            .findById(id)
+            .orElseThrow(() -> new DoNotExistException("해당하는 참가자가 없습니다."));
+    if (!participant.getUser().getUniqueId().equals(uniqueId)) {
+      throw new UnauthorizedDeletionException("본인만 삭제할 수 있습니다.");
+    }
+    Program program =
+        programRepository
+            .findById(participant.getProgram().getId())
+            .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
+    program.addCurrentQuota(-1);
+    participantRepository.delete(participant);
   }
 }

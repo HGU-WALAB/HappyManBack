@@ -5,10 +5,7 @@ import com.walab.happymanback.participant.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,4 +27,10 @@ public class ParticipantController {
     return ResponseEntity.ok(
             MyParticipationListResponse.from(participantService.getParticipantsFrom(uniqueId)));
   }
+
+  @DeleteMapping("/api/happyman/participants/{id}")
+    public ResponseEntity<Void> deleteParticipant(@PathVariable Long id, @AuthenticationPrincipal String uniqueId) {
+        participantService.deleteParticipant(id, uniqueId);
+        return ResponseEntity.ok().build();
+    }
 }
