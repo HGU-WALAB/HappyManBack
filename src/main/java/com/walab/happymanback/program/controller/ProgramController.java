@@ -60,7 +60,7 @@ public class ProgramController {
     return ResponseEntity.ok(NotLoginProgramListResponse.from(programs));
   }
 
-  @GetMapping("/api/happyman/programs/{id}")
+  @GetMapping("/api/happyman/all/programs/{id}")
   public ResponseEntity<ProgramDetailResponse> getProgram(
       @AuthenticationPrincipal String uniqueId, @PathVariable Long id) {
     ProgramDto program = programService.getProgramWithFile(id);
