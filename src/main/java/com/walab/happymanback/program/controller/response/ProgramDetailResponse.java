@@ -47,6 +47,8 @@ public class ProgramDetailResponse {
 
   private String teacher;
 
+  private Boolean isFull;
+
   public static ProgramDetailResponse from(
       ProgramDto programDto, Boolean isBookmarked, Boolean isApplied) {
     return ProgramDetailResponse.builder()
@@ -65,6 +67,7 @@ public class ProgramDetailResponse {
         .isBookmarked(isBookmarked)
         .isApplied(isApplied)
         .teacher(programDto.getTeacher())
+        .isFull(programDto.getQuota() != null && programDto.getCurrentQuota() >= programDto.getQuota())
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)
