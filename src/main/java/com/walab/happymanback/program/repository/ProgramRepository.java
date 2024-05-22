@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProgramRepository extends JpaRepository<Program, Long> {
-  @Query("SELECT p FROM Program p JOIN FETCH p.category")
+  @Query("SELECT p FROM Program p JOIN FETCH p.category order by p.id desc")
   List<Program> findAllWithCategory();
 
   @Query("SELECT p FROM Program p LEFT JOIN FETCH p.files WHERE p.id = :id")
@@ -31,6 +31,6 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
   @Query("SELECT p FROM Program p JOIN FETCH p.category LEFT JOIN FETCH p.files WHERE p.id = :id")
   Optional<Program> findByIdWithAll(Long id);
 
-  @Query("SELECT p FROM Program p JOIN FETCH p.bookmarks b WHERE b.user.uniqueId = :uniqueId")
+  @Query("SELECT p FROM Program p JOIN FETCH p.bookmarks b WHERE b.user.uniqueId = :uniqueId order by p.id desc")
   List<Program> findAllIsBookmarked(String uniqueId);
 }

@@ -17,6 +17,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     @Query("DELETE FROM Participant p WHERE p.program.id = :programId")
     void deleteByProgramId(Long programId);
 
-    @Query("SELECT p FROM Participant p JOIN FETCH p.program u WHERE p.user.uniqueId= :uniqueId")
+    @Query("SELECT p FROM Participant p JOIN FETCH p.program u WHERE p.user.uniqueId= :uniqueId order by p.id desc")
     List<Participant> findAllByUniqueId(String uniqueId);
 }
