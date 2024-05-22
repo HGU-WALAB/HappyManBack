@@ -68,6 +68,9 @@ public class Program extends BaseTime {
   @Column(name = "image", length = 300)
   private String image;
 
+  @Column(name = "teacher", length = 50)
+  private String teacher;
+
   @OneToMany(
       mappedBy = "program",
       fetch = FetchType.LAZY,
@@ -97,6 +100,7 @@ public class Program extends BaseTime {
             .managerContact(dto.getManagerContact())
             .image(dto.getImage())
             .category(category)
+            .teacher(dto.getTeacher())
             .build();
     newProgram.setFiles(
         dto.getProgramFileDtos().stream()
@@ -116,6 +120,7 @@ public class Program extends BaseTime {
     this.managerName = dto.getManagerName();
     this.managerContact = dto.getManagerContact();
     this.image = dto.getImage() != null ? dto.getImage() : this.image;
+    this.teacher = dto.getTeacher();
     if (!dto.getProgramFileDtos().isEmpty()) {
       this.files.clear();
       this.files.addAll(

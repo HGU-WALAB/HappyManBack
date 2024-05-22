@@ -34,4 +34,6 @@ public class UpdateProgramRequest {
     private String managerContact;
 
     private Long categoryId;
+
+    private String teacher;
 }

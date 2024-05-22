@@ -38,6 +38,8 @@ public class NotLoginProgramDetailResponse {
 
   private String image;
 
+  private String teacher;
+
   private List<ProgramFile> programFiles;
 
   public static NotLoginProgramDetailResponse from(ProgramDto programDto) {
@@ -54,6 +56,7 @@ public class NotLoginProgramDetailResponse {
         .managerName(programDto.getManagerName())
         .managerContact(programDto.getManagerContact())
         .image(programDto.getImage())
+        .teacher(programDto.getTeacher())
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)

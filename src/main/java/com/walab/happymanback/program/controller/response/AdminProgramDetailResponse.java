@@ -41,6 +41,8 @@ public class AdminProgramDetailResponse {
 
   private Long categoryId;
 
+  private String teacher;
+
   private List<ProgramFile> programFiles;
   public static AdminProgramDetailResponse from(
       ProgramDto programDto) {
@@ -58,6 +60,7 @@ public class AdminProgramDetailResponse {
         .managerContact(programDto.getManagerContact())
         .image(programDto.getImage())
         .categoryId(programDto.getCategoryDto().getId())
+        .teacher(programDto.getTeacher())
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)

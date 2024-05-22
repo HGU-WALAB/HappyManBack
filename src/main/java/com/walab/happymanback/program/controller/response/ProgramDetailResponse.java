@@ -45,6 +45,8 @@ public class ProgramDetailResponse {
 
   private Boolean isApplied;
 
+  private String teacher;
+
   public static ProgramDetailResponse from(
       ProgramDto programDto, Boolean isBookmarked, Boolean isApplied) {
     return ProgramDetailResponse.builder()
@@ -62,6 +64,7 @@ public class ProgramDetailResponse {
         .image(programDto.getImage())
         .isBookmarked(isBookmarked)
         .isApplied(isApplied)
+        .teacher(programDto.getTeacher())
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)

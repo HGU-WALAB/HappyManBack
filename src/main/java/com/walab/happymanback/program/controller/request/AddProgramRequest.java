@@ -31,10 +31,11 @@ public class AddProgramRequest {
 
   private String applicationForm;
 
-
   private String managerName;
 
   private String managerContact;
 
   private Long categoryId;
+
+  private String teacher;
 }

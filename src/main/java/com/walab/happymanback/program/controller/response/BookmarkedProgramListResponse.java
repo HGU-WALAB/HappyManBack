@@ -38,7 +38,7 @@ public class BookmarkedProgramListResponse {
     private Long id;
     private String name;
     private String image;
-
+    private String teacher;
     private String applyEndDate;
 
     private Boolean isBookmarked;
@@ -48,6 +48,7 @@ public class BookmarkedProgramListResponse {
       program.id = programDto.getId();
       program.name = programDto.getName();
       program.image = programDto.getImage();
+      program.teacher = programDto.getTeacher();
       program.applyEndDate = programDto.getApplyEndDate().format(DATE_TIME_FORMATTER);
       return program;
     }

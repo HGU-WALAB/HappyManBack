@@ -45,6 +45,8 @@ public class ProgramDto {
 
   private String managerContact;
 
+  private String teacher;
+
   private String image;
 
   private CategoryDto categoryDto;
@@ -69,6 +71,7 @@ public class ProgramDto {
             .applicationForm(request.getApplicationForm())
             .managerName(request.getManagerName())
             .managerContact(request.getManagerContact())
+            .teacher(request.getTeacher())
             .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
             .programFileDtos(
                 fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
@@ -92,6 +95,7 @@ public class ProgramDto {
             .endDate(request.getEndDate())
             .managerName(request.getManagerName())
             .managerContact(request.getManagerContact())
+            .teacher(request.getTeacher())
             .categoryDto(CategoryDto.builder().id(request.getCategoryId()).build())
             .programFileDtos(
                 fileDtos.stream().map(ProgramFileDto::from).collect(Collectors.toList()))
@@ -116,6 +120,7 @@ public class ProgramDto {
         .applicationForm(program.getApplicationForm())
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
+        .teacher(program.getTeacher())
         .image(program.getImage())
         .createdDate(program.getCreatedDate())
         .build();
@@ -135,6 +140,7 @@ public class ProgramDto {
         .applicationForm(program.getApplicationForm())
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
+        .teacher(program.getTeacher())
         .image(program.getImage())
         .createdDate(program.getCreatedDate())
         .categoryDto(CategoryDto.from(category))
@@ -155,6 +161,7 @@ public class ProgramDto {
         .applicationForm(program.getApplicationForm())
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
+        .teacher(program.getTeacher())
         .image(program.getImage())
         .createdDate(program.getCreatedDate())
         .programFileDtos(
@@ -176,6 +183,7 @@ public class ProgramDto {
         .applicationForm(program.getApplicationForm())
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
+        .teacher(program.getTeacher())
         .image(program.getImage())
         .createdDate(program.getCreatedDate())
         .participants(
@@ -199,6 +207,7 @@ public class ProgramDto {
         .applicationForm(program.getApplicationForm())
         .managerName(program.getManagerName())
         .managerContact(program.getManagerContact())
+        .teacher(program.getTeacher())
         .image(program.getImage())
         .createdDate(program.getCreatedDate())
         .categoryDto(CategoryDto.from(program.getCategory()))
