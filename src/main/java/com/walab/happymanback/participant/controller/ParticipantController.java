@@ -1,5 +1,6 @@
 package com.walab.happymanback.participant.controller;
 
+import com.walab.happymanback.participant.controller.response.CompletePercentageResponse;
 import com.walab.happymanback.participant.controller.response.MyParticipationListResponse;
 import com.walab.happymanback.participant.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,20 @@ public class ParticipantController {
   public ResponseEntity<MyParticipationListResponse> getMyParticipationList(
       @AuthenticationPrincipal String uniqueId) {
     return ResponseEntity.ok(
-            MyParticipationListResponse.from(participantService.getParticipantsFrom(uniqueId)));
+        MyParticipationListResponse.from(participantService.getParticipantsFrom(uniqueId)));
   }
 
   @DeleteMapping("/api/happyman/participants/{id}")
-    public ResponseEntity<Void> deleteParticipant(@PathVariable Long id, @AuthenticationPrincipal String uniqueId) {
-        participantService.deleteParticipant(id, uniqueId);
-        return ResponseEntity.ok().build();
+  public ResponseEntity<Void> deleteParticipant(
+      @PathVariable Long id, @AuthenticationPrincipal String uniqueId) {
+    participantService.deleteParticipant(id, uniqueId);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/api/happyman/programs/complete-percent/graph")
+    public ResponseEntity<CompletePercentageResponse> getCompletePercentGraph(
+        @AuthenticationPrincipal String uniqueId) {
+        return ResponseEntity.ok(
+            CompletePercentageResponse.from(participantService.getParticipants(uniqueId)));
     }
 }

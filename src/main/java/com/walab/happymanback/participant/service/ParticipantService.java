@@ -81,4 +81,17 @@ public class ParticipantService {
     program.addCurrentQuota(-1);
     participantRepository.delete(participant);
   }
+
+    public List<ParticipantDto> getComepletedPrograms(String uniqueId) {
+        return participantRepository.findAllByUniqueId(uniqueId).stream()
+                .filter(Participant::isCompleted)
+                .map(ParticipantDto::withCategory)
+                .collect(Collectors.toList());
+    }
+
+  public List<ParticipantDto> getParticipants(String uniqueId) {
+    return participantRepository.findAllByUniqueId(uniqueId).stream()
+        .map(ParticipantDto::from)
+        .collect(Collectors.toList());
+  }
 }

@@ -45,4 +45,15 @@ public class ParticipantDto {
         .semester(participant.getSemester())
         .build();
   }
+
+    public static ParticipantDto withCategory(Participant participant) {
+    return ParticipantDto.builder()
+        .id(participant.getId())
+        .user(UserDto.from(participant.getUser()))
+        .program(ProgramDto.from(participant.getProgram(), participant.getProgram().getCategory()))
+        .applicationForm(participant.getApplicationForm())
+        .status(participant.getStatus().getKorean())
+        .semester(participant.getSemester())
+        .build();
+    }
 }

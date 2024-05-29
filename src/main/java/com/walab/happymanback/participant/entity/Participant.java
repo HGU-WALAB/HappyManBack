@@ -50,4 +50,8 @@ public class Participant extends BaseTime {
   public void changeStatus(String status) {
     this.status = ParticipantStatus.from(status);
   }
+
+  public boolean isCompleted() {
+    return this.status == ParticipantStatus.COMPLETED;
+  }
 }

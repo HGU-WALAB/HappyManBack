@@ -29,6 +29,8 @@ public class MyParticipationListResponse {
 
     private String programName;
 
+    private Long programId;
+
     private String status;
 
     private String startDate;
@@ -39,6 +41,7 @@ public class MyParticipationListResponse {
       return Participation.builder()
           .id(dto.getId())
           .programName(dto.getProgram().getName())
+          .programId(dto.getProgram().getId())
           .status(dto.getStatus())
           .startDate(dto.getProgram().getStartDate().format(DATE_TIME_FORMATTER))
           .endDate(dto.getProgram().getEndDate().format(DATE_TIME_FORMATTER))
