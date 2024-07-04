@@ -74,4 +74,8 @@ public class BookmarkService {
                 .orElseThrow(() -> new DoNotExistException("해당 프로그램이 없습니다."));
         return bookmarkRepository.existsByUserAndProgram(user, program);
     }
+
+    public void deleteBookmarkByProgramIds(List<Long> ids) {
+        bookmarkRepository.deleteByProgramIds(ids);
+    }
 }

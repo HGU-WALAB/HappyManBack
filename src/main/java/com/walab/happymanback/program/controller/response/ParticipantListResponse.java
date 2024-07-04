@@ -58,7 +58,7 @@ public class ParticipantListResponse {
                     .uniqueId(dto.getUser().getUniqueId())
                     .name(dto.getUser().getName())
                     .email(dto.getUser().getEmail())
-                    .semester(dto.getUser().getSemester())
+                    .semester(dto.getSemester())
                     .major1(dto.getUser().getMajor1())
                     .applicationForm(dto.getApplicationForm())
                     .status(dto.getStatus())

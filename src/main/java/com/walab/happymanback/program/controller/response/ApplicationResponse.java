@@ -38,6 +38,8 @@ public class ApplicationResponse {
 
     private String category;
 
+    private String teacher;
+
     public static ApplicationResponse from(ProgramDto programDto) {
         return ApplicationResponse.builder()
                 .id(programDto.getId())
@@ -52,6 +54,7 @@ public class ApplicationResponse {
                 .managerContact(programDto.getManagerContact())
                 .applicationForm(programDto.getApplicationForm())
                 .image(programDto.getImage())
+                .teacher(programDto.getTeacher())
                 .category(programDto.getCategoryDto().getName())
                 .build();
     }

@@ -78,6 +78,19 @@ public class ProgramController {
             participantService.isParticipant(id, uniqueId)));
   }
 
+  @GetMapping("/api/happyman/all/programs/{id}")
+  public ResponseEntity<NotLoginProgramDetailResponse> getProgram(@PathVariable Long id) {
+    ProgramDto program = programService.getProgramWithFile(id);
+    program
+        .getProgramFileDtos()
+        .forEach(
+            programFileDto ->
+                programFileDto.setStoredFilePath(
+                    fileService.getFile(programFileDto.getStoredFilePath())));
+    program.setImage(fileService.getFile(program.getImage()));
+    return ResponseEntity.ok(NotLoginProgramDetailResponse.from(program));
+  }
+
   @GetMapping("/api/happyman/admin/programs")
   public ResponseEntity<AdminProgramListResponse> adminGetPrograms() {
     List<ProgramDto> programs = programService.getProgramsWithCategory();
@@ -137,6 +150,7 @@ public class ProgramController {
 
   @DeleteMapping("/api/happyman/admin/programs")
   public ResponseEntity<Void> deleteProgram(@RequestParam List<Long> ids) {
+    bookmarkService.deleteBookmarkByProgramIds(ids);
     programService.deletePrograms(ids);
     return ResponseEntity.ok().build();
   }
@@ -144,13 +158,14 @@ public class ProgramController {
   @GetMapping("/api/happyman/admin/programs/{id}/participants")
   public ResponseEntity<ParticipantListResponse> getParticipants(@PathVariable Long id) {
     return ResponseEntity.ok(
-            ParticipantListResponse.from(programService.getProgramWithParticipant(id)));
+        ParticipantListResponse.from(programService.getProgramWithParticipant(id)));
   }
 
   @GetMapping("/api/happyman/programs/bookmarked")
-    public ResponseEntity<BookmarkedProgramListResponse> getBookmarkedPrograms(@AuthenticationPrincipal String uniqueId) {
-        List<ProgramDto> programs = programService.getBookmarkedPrograms(uniqueId);
-        programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
-        return ResponseEntity.ok(BookmarkedProgramListResponse.from(programs));
-    }
+  public ResponseEntity<BookmarkedProgramListResponse> getBookmarkedPrograms(
+      @AuthenticationPrincipal String uniqueId) {
+    List<ProgramDto> programs = programService.getBookmarkedPrograms(uniqueId);
+    programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
+    return ResponseEntity.ok(BookmarkedProgramListResponse.from(programs));
+  }
 }

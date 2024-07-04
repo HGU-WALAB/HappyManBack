@@ -34,16 +34,24 @@ public class Participant extends BaseTime {
   @Column(name = "survey_form", columnDefinition = "TEXT")
   private String surveyForm;
 
+  @Column(name = "semester", nullable = false)
+  private Integer semester;
+
   public static Participant apply(ParticipantDto dto, Program program, User user) {
     Participant participant = new Participant();
     participant.program = program;
     participant.user = user;
     participant.status = ParticipantStatus.WAITING;
     participant.applicationForm = dto.getApplicationForm();
+    participant.semester = user.getSemester();
     return participant;
   }
 
   public void changeStatus(String status) {
     this.status = ParticipantStatus.from(status);
+  }
+
+  public boolean isCompleted() {
+    return this.status == ParticipantStatus.COMPLETED;
   }
 }

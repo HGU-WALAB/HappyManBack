@@ -7,11 +7,10 @@ import lombok.Getter;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @Getter
-public class ProgramDetailResponse {
+public class NotLoginProgramDetailResponse {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -39,19 +38,12 @@ public class ProgramDetailResponse {
 
   private String image;
 
-  private List<ProgramFile> programFiles;
-
-  private Boolean isBookmarked;
-
-  private Boolean isApplied;
-
   private String teacher;
 
-  private Boolean isFull;
+  private List<ProgramFile> programFiles;
 
-  public static ProgramDetailResponse from(
-      ProgramDto programDto, Boolean isBookmarked, Boolean isApplied) {
-    return ProgramDetailResponse.builder()
+  public static NotLoginProgramDetailResponse from(ProgramDto programDto) {
+    return NotLoginProgramDetailResponse.builder()
         .id(programDto.getId())
         .name(programDto.getName())
         .quota(programDto.getQuota())
@@ -64,14 +56,11 @@ public class ProgramDetailResponse {
         .managerName(programDto.getManagerName())
         .managerContact(programDto.getManagerContact())
         .image(programDto.getImage())
-        .isBookmarked(isBookmarked)
-        .isApplied(isApplied)
         .teacher(programDto.getTeacher())
-        .isFull(programDto.getQuota() != null && programDto.getCurrentQuota() >= programDto.getQuota())
         .programFiles(
             programDto.getProgramFileDtos().stream()
                 .map(ProgramFile::from)
-                .collect(Collectors.toList()))
+                .collect(java.util.stream.Collectors.toList()))
         .build();
   }
 

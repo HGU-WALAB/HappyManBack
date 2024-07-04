@@ -36,7 +36,7 @@ public class NotLoginProgramListResponse {
         private String name;
         private String status;
         private String image;
-
+        private String teacher;
         private String applyEndDate;
 
         private static Program from(ProgramDto programDto) {
@@ -45,6 +45,7 @@ public class NotLoginProgramListResponse {
             program.categoryId = programDto.getCategoryDto().getId();
             program.name = programDto.getName();
             program.image = programDto.getImage();
+            program.teacher = programDto.getTeacher();
             program.applyEndDate = programDto.getApplyEndDate().format(DATE_TIME_FORMATTER);
             program.status = evaluateStatus(programDto.getApplyStartDate(), programDto.getApplyEndDate()).getKorean();
             return program;
