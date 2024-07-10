@@ -176,11 +176,21 @@ public class ProgramController {
         @RequestParam(value = "size", defaultValue = "10") int size,
         @RequestParam(value = "categoryId", required = false) Long categoryId,
         @RequestParam(value = "classification", required = false) String classification) {
-    System.out.println(classification);
         List<ProgramDto> programs = programService.getProgramsFilteredPaged(page, size, categoryId, classification);
         programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
         return ResponseEntity.ok(
                 PagedProgramListResponse.from(programs, bookmarkService.getBookmarks(uniqueId),programService.getTotalPage(size,categoryId,classification)));
     }
 
+  @GetMapping("/api/happyman/all/programs/paged")
+  public ResponseEntity<NotLoginPagedProgramListResponse> getProgramsPaged(
+          @RequestParam(value = "page", defaultValue = "1") int page,
+          @RequestParam(value = "size", defaultValue = "10") int size,
+          @RequestParam(value = "categoryId", required = false) Long categoryId,
+          @RequestParam(value = "classification", required = false) String classification) {
+    List<ProgramDto> programs = programService.getProgramsFilteredPaged(page, size, categoryId, classification);
+    programs.forEach(program -> program.setImage(fileService.getFile(program.getImage())));
+    return ResponseEntity.ok(
+            NotLoginPagedProgramListResponse.from(programs, programService.getTotalPage(size,categoryId,classification)));
+  }
 }
