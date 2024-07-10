@@ -67,4 +67,8 @@ public class User extends BaseTime {
         .major2(dto.getMajor2())
         .build();
   }
+
+  public void setStatus(UserStatus status) {
+    this.status = status;
+  }
 }
