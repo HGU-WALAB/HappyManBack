@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +23,9 @@ public class ProgramService {
   private final CategoryRepository categoryRepository;
   private final ProgramRepository programRepository;
   private final ParticipantRepository participantRepository;
+
+  @PersistenceContext
+  private EntityManager entityManager;
 
   public void createProgram(ProgramDto dto) {
     programRepository.save(
@@ -102,5 +108,109 @@ public class ProgramService {
     return programRepository.findAllIsBookmarked(uniqueId).stream()
         .map(ProgramDto::from)
         .collect(Collectors.toList());
+  }
+
+  public List<ProgramDto> getProgramsFilteredPaged(int page, int size, Long categoryId, String classification) {
+    StringBuilder queryBuilder = new StringBuilder("SELECT p FROM Program p");
+    boolean hasCategoryId = categoryId != null;
+    boolean hasClassification = classification != null;
+
+    if (hasCategoryId) {
+      queryBuilder.append(" WHERE p.category.id = :categoryId");
+    }
+
+    if (hasClassification) {
+      if (hasCategoryId) {
+        switch (classification) {
+          case "신청 진행":
+            queryBuilder.append(" AND p.applyStartDate <= CURRENT_DATE AND p.applyEndDate >= CURRENT_DATE");
+            break;
+          case "신청 마감":
+            queryBuilder.append(" AND p.applyEndDate < CURRENT_DATE");
+            break;
+          case "신청 대기":
+            queryBuilder.append(" AND p.applyStartDate > CURRENT_DATE");
+            break;
+        }
+      } else {
+        queryBuilder.append(" WHERE");
+        switch (classification) {
+          case "신청 진행":
+            queryBuilder.append(" p.applyStartDate <= CURRENT_DATE AND p.applyEndDate >= CURRENT_DATE");
+            break;
+          case "신청 마감":
+            queryBuilder.append(" p.applyEndDate < CURRENT_DATE");
+            break;
+          case "신청 대기":
+            queryBuilder.append(" p.applyStartDate > CURRENT_DATE");
+            break;
+        }
+      }
+    }
+
+    queryBuilder.append(" ORDER BY p.id DESC");
+
+    TypedQuery<Program> query = entityManager.createQuery(queryBuilder.toString(), Program.class);
+
+    if (hasCategoryId) {
+      query.setParameter("categoryId", categoryId);
+    }
+
+    query.setFirstResult((page-1) * size);
+    query.setMaxResults(size);
+
+    List<Program> programs = query.getResultList();
+
+    return programs.stream().map(ProgramDto::from).collect(Collectors.toList());
+  }
+
+
+  public Integer getTotalPage(int size, Long categoryId, String classification) {
+    StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(p) FROM Program p");
+    boolean hasCategoryId = categoryId != null;
+    boolean hasClassification = classification != null;
+
+    if (hasCategoryId) {
+      queryBuilder.append(" WHERE p.category.id = :categoryId");
+    }
+
+    if (hasClassification) {
+      if (hasCategoryId) {
+        switch (classification) {
+          case "신청 진행":
+            queryBuilder.append(" AND p.applyStartDate <= CURRENT_DATE AND p.applyEndDate >= CURRENT_DATE");
+            break;
+          case "신청 마감":
+            queryBuilder.append(" AND p.applyEndDate < CURRENT_DATE");
+            break;
+          case "신청 대기":
+            queryBuilder.append(" AND p.applyStartDate > CURRENT_DATE");
+            break;
+        }
+      } else {
+        queryBuilder.append(" WHERE");
+        switch (classification) {
+          case "신청 진행":
+            queryBuilder.append(" p.applyStartDate <= CURRENT_DATE AND p.applyEndDate >= CURRENT_DATE");
+            break;
+          case "신청 마감":
+            queryBuilder.append(" p.applyEndDate < CURRENT_DATE");
+            break;
+          case "신청 대기":
+            queryBuilder.append(" p.applyStartDate > CURRENT_DATE");
+            break;
+        }
+      }
+    }
+
+    TypedQuery<Long> query = entityManager.createQuery(queryBuilder.toString(), Long.class);
+
+    if (hasCategoryId) {
+      query.setParameter("categoryId", categoryId);
+    }
+
+    Long total = query.getSingleResult();
+
+    return (int) Math.ceil((double) total / size);
   }
 }
